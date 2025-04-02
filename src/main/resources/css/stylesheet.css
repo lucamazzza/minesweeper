@@ -1,0 +1,14 @@
+* {
+    -fx-font: normal .AppleSystemUIFont;
+}
+.menu {
+    -fx-start-margin: 0;
+}
+
+.button {
+    -fx-background-color: lightgray;
+    -fx-border-color: gray;
+    -fx-border-width: 3px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
