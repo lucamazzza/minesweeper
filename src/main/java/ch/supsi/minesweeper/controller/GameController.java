@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GameController implements GameEventHandler, PlayerEventHandler {
 
-    private static GameController myself;
+    private static GameController self;
 
     private GameModel gameModel;
 
@@ -20,11 +20,10 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     }
 
     public static GameController getInstance() {
-        if (myself == null) {
-            myself = new GameController();
+        if (self == null) {
+            self = new GameController();
         }
-
-        return myself;
+        return self;
     }
 
     public void initialize(List<DataView> views) {
@@ -42,7 +41,6 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     @Override
     public void save() {
         // do whatever you must do to start a new game
-
         // then update your views
         this.views.forEach(DataView::update);
     }
