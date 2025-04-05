@@ -24,3 +24,17 @@ build:
   only:
     - main
     - dev
+
+# Deploy job - runs only on tags that start with 'release-'
+deploy:
+  stage: deploy
+  script:
+    - mvn package
+    - echo "Deploying JAR package..."
+    - mkdir -p deploy
+    - cp target/*.jar deploy/
+  artifacts:
+    paths:
+      - deploy/*.jar
+  only:
+    - /^release-.*$/
