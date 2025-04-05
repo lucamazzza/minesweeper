@@ -1,0 +1,26 @@
+# .gitlab-ci.yml
+image: maven:3.8-openjdk-17
+
+stages:
+  - build
+  - deploy
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+# Cache dependencies to speed up builds
+cache:
+  paths:
+    - .m2/repository
+
+# Build job - runs on every push
+build:
+  stage: build
+  script:
+    - mvn clean compile
+  artifacts:
+    paths:
+      - target/
+  only:
+    - main
+    - dev
