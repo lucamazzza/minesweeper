@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class GameBoardViewFxml implements ControlledFxView {
 
-    private static GameBoardViewFxml myself;
+    private static GameBoardViewFxml self;
 
     private PlayerEventHandler playerEventHandler;
 
@@ -273,14 +273,14 @@ public class GameBoardViewFxml implements ControlledFxView {
     private GameBoardViewFxml() {}
 
     public static GameBoardViewFxml getInstance() {
-        if (myself == null) {
-            myself = new GameBoardViewFxml();
+        if (self == null) {
+            self = new GameBoardViewFxml();
 
             try {
                 URL fxmlUrl = GameBoardViewFxml.class.getResource("/gameboard.fxml");
                 if (fxmlUrl != null) {
                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                    fxmlLoader.setController(myself);
+                    fxmlLoader.setController(self);
                     fxmlLoader.load();
                 }
 
@@ -289,7 +289,7 @@ public class GameBoardViewFxml implements ControlledFxView {
             }
         }
 
-        return myself;
+        return self;
     }
 
     @Override
@@ -301,13 +301,10 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     private void createBehaviour() {
         // cell00
-        this.cell00.setOnAction(event -> this.playerEventHandler.move());
+        this.cell00.setOnAction(event -> this.playerEventHandler.action());
 
         // cell01
-        this.cell01.setOnAction(event -> this.playerEventHandler.move());
-
-        // add event handlers for all necessary buttons
-        // ...
+        this.cell01.setOnAction(event -> this.playerEventHandler.action());
     }
 
     @Override
@@ -323,5 +320,4 @@ public class GameBoardViewFxml implements ControlledFxView {
         Date date = new Date(System.currentTimeMillis());
         System.out.println(this.getClass().getSimpleName() + " updated..." + dateFormat.format(date));
     }
-
 }
