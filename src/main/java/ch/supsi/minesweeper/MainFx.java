@@ -20,6 +20,7 @@ public class MainFx extends Application {
     private final AbstractModel gameModel;
     private final ControlledFxView menuBarView;
     private final ControlledFxView gameBoardView;
+    private final ControlledFxView mainMenuView;
     private final UncontrolledFxView userFeedbackView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
@@ -29,6 +30,7 @@ public class MainFx extends Application {
         this.gameModel = GameModel.getInstance();
 
         // VIEWS
+        this.mainMenuView = MainMenuViewFxml.getInstance();
         this.menuBarView = MenuBarViewFxml.getInstance();
         this.gameBoardView = GameBoardViewFxml.getInstance();
         this.userFeedbackView = UserFeedbackViewFxml.getInstance();
@@ -61,14 +63,19 @@ public class MainFx extends Application {
                 }
         );
 
+
+
         // SCAFFOLDING OF MAIN PANE
         BorderPane mainBorderPane = new BorderPane();
+        mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
-        mainBorderPane.setCenter(this.gameBoardView.getNode());
+        //mainBorderPane.setCenter(this.gameBoardView.getNode()); da reimpostare come center quando schiaccio un pulsante
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
 
+
+
         // SCENE
-        Scene scene = new Scene(mainBorderPane);
+        Scene scene = new Scene(mainBorderPane, 800, 600);
 
         // PRIMARY STAGE
         primaryStage.setTitle(MainFx.APP_TITLE);
