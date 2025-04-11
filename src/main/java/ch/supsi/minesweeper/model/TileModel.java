@@ -1,22 +1,24 @@
 package ch.supsi.minesweeper.model;
 
-public class TileModel extends AbstractModel implements TileEventHandler{
-    private boolean hasBomb;
-    private boolean isMarked;
+import lombok.Getter;
 
-    public TileModel() {
-        hasBomb = false;
+public class TileModel extends AbstractModel implements TileEventHandler{
+    private final boolean isBomb;
+    @Getter
+    private boolean isMarked;
+    @Getter
+    private boolean isExploded;
+
+    public TileModel(final boolean isBomb) {
+        this.isBomb = isBomb;
         isMarked = false;
+        isExploded = false;
     }
 
     @Override
     public void flag() {
-        if (hasBomb) {
-            // Qualcosa
-            return;
-        }
         if (isMarked) {
-            // Qualcosa
+            isMarked = false;
             return;
         }
         isMarked = true;
@@ -24,10 +26,8 @@ public class TileModel extends AbstractModel implements TileEventHandler{
 
     @Override
     public void uncover() {
-        if (hasBomb) {
-            // Qualcosa
-            return;
+        if (isBomb) {
+            isExploded = true;
         }
-        //Qualcosa
     }
 }

@@ -10,8 +10,8 @@ public class TileController implements TileEventHandler {
     private final TileModel model;
     private DataView gameBoardViewFxml;
 
-    public TileController () {
-        model = new TileModel();
+    public TileController (final boolean isBomb) {
+        model = new TileModel(isBomb);
         gameBoardViewFxml = GameBoardViewFxml.getInstance();
     }
 
@@ -27,5 +27,11 @@ public class TileController implements TileEventHandler {
         gameBoardViewFxml.update();
     }
 
+    public boolean isTileExploded () {
+        return model.isExploded();
+    }
 
+    public boolean isTileMarked() {
+        return model.isMarked();
+    }
 }
