@@ -8,8 +8,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -300,11 +302,14 @@ public class GameBoardViewFxml implements ControlledFxView {
     }
 
     private void createBehaviour() {
-        // cell00
-        this.cell00.setOnAction(event -> this.playerEventHandler.action());
-
-        // cell01
-        this.cell01.setOnAction(event -> this.playerEventHandler.action());
+        // Use reflection to populate button behavior
+        cell00.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+                // tile[0].flag()
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                // tile[0].uncover()
+            }
+        });
     }
 
     @Override
