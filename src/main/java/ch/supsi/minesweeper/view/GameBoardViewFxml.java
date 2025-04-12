@@ -314,10 +314,13 @@ public class GameBoardViewFxml implements ControlledFxView {
                         Button tile = (Button) field.get(self);
                         tiles.put(tile, new TileController());
                         tile.setOnMouseClicked(event -> {
+                            TileController controller = tiles.get(tile);
                             System.out.println(field.getName());
                             if (event.getButton() == MouseButton.PRIMARY) {
-                                tiles.get(tile).uncover();
-                                System.out.println("Uncover");
+                                if(!controller.isTileMarked()) {
+                                    tiles.get(tile).uncover();
+                                    System.out.println("Uncover");
+                                }
                             } else if (event.getButton() == MouseButton.SECONDARY) {
                                 tiles.get(tile).flag();
                                 System.out.println("Flag");
