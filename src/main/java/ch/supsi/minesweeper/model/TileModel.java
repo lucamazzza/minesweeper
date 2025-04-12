@@ -1,16 +1,19 @@
 package ch.supsi.minesweeper.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class TileModel extends AbstractModel implements TileEventHandler{
-    private final boolean isBomb;
+    @Setter
+    @Getter
+    private boolean isBomb;
     @Getter
     private boolean isMarked;
     @Getter
     private boolean isExploded;
 
-    public TileModel(final boolean isBomb) {
-        this.isBomb = isBomb;
+    public TileModel() {
+        isBomb = false;
         isMarked = false;
         isExploded = false;
     }
