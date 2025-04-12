@@ -1,6 +1,7 @@
 package ch.supsi.minesweeper.view;
 
 import ch.supsi.minesweeper.controller.EventHandler;
+import ch.supsi.minesweeper.controller.TileController;
 import ch.supsi.minesweeper.model.AbstractModel;
 import ch.supsi.minesweeper.model.GameModel;
 import ch.supsi.minesweeper.model.PlayerEventHandler;
@@ -11,12 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 
 public class GameBoardViewFxml implements ControlledFxView {
 
@@ -25,6 +27,8 @@ public class GameBoardViewFxml implements ControlledFxView {
     private PlayerEventHandler playerEventHandler;
 
     private GameModel gameModel;
+
+    private HashMap<Button, TileController> tiles;
 
     @FXML
     private GridPane containerPane;
@@ -277,7 +281,6 @@ public class GameBoardViewFxml implements ControlledFxView {
     public static GameBoardViewFxml getInstance() {
         if (self == null) {
             self = new GameBoardViewFxml();
-
             try {
                 URL fxmlUrl = GameBoardViewFxml.class.getResource("/gameboard.fxml");
                 if (fxmlUrl != null) {
@@ -290,7 +293,6 @@ public class GameBoardViewFxml implements ControlledFxView {
                 throw new RuntimeException(e);
             }
         }
-
         return self;
     }
 
@@ -302,15 +304,33 @@ public class GameBoardViewFxml implements ControlledFxView {
     }
 
     private void createBehaviour() {
+        this.tiles = new HashMap<>();
         // Use reflection to populate button behavior
-        cell00.setOnMouseClicked(e -> {
-            if (e.getButton() == MouseButton.PRIMARY) {
-                // tile[0].flag()
-            } else if (e.getButton() == MouseButton.SECONDARY) {
-                // tile[0].uncover()
-            }
-        });
+        Arrays.stream(self.getClass().getDeclaredFields())
+                .filter(field -> field.getType().equals(Button.class))
+                .forEach(field -> {
+                    field.setAccessible(true);
+                    try {
+                        Button tile = (Button) field.get(self);
+                        tiles.put(tile, new TileController());
+                        tile.setOnMouseClicked(event -> {
+                            System.out.println(field.getName());
+                            if (event.getButton() == MouseButton.PRIMARY) {
+                                tiles.get(tile).uncover();
+                                System.out.println("Uncover");
+                            } else if (event.getButton() == MouseButton.SECONDARY) {
+                                tiles.get(tile).flag();
+                                System.out.println("Flag");
+                            }
+                        });
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        field.setAccessible(false);
+                    }
+                });
     }
+
 
     @Override
     public Node getNode() {
@@ -326,3 +346,4 @@ public class GameBoardViewFxml implements ControlledFxView {
         System.out.println(this.getClass().getSimpleName() + " updated..." + dateFormat.format(date));
     }
 }
+
