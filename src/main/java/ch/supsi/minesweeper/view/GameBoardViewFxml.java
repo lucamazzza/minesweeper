@@ -319,11 +319,11 @@ public class GameBoardViewFxml implements ControlledFxView {
                             if (event.getButton() == MouseButton.PRIMARY) {
                                 if(!controller.isTileMarked()) {
                                     tiles.get(tile).uncover();
-                                    System.out.println("Uncover");
+                                    tile.setText("U");
                                 }
                             } else if (event.getButton() == MouseButton.SECONDARY) {
                                 tiles.get(tile).flag();
-                                System.out.println("Flag");
+                                tile.setText("F");
                             }
                         });
                     } catch (IllegalAccessException e) {
