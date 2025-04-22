@@ -20,6 +20,7 @@ public class MainFx extends Application {
     private final AbstractModel gameModel;
     private final ControlledFxView menuBarView;
     private final ControlledFxView gameBoardView;
+    private final MainMenuViewFxml mainMenuView;
     private final UncontrolledFxView userFeedbackView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
@@ -29,6 +30,7 @@ public class MainFx extends Application {
         this.gameModel = GameModel.getInstance();
 
         // VIEWS
+        this.mainMenuView = MainMenuViewFxml.getInstance();
         this.menuBarView = MenuBarViewFxml.getInstance();
         this.gameBoardView = GameBoardViewFxml.getInstance();
         this.userFeedbackView = UserFeedbackViewFxml.getInstance();
@@ -41,34 +43,29 @@ public class MainFx extends Application {
         this.menuBarView.initialize(this.gameEventHandler, this.gameModel);
         this.gameBoardView.initialize(this.playerEventHandler, this.gameModel);
         this.userFeedbackView.initialize(this.gameModel);
+        this.mainMenuView.initialize(this.playerEventHandler, this.gameModel);
         GameController.getInstance().initialize(List.of(this.menuBarView, this.gameBoardView, this.userFeedbackView));
     }
 
     @Override
     public void start(Stage primaryStage) {
-        // handle the main window close request
-        // in real life, this event should not be dealt with here!
-        // it should actually be delegated to a suitable ExitController!
-        primaryStage.setOnCloseRequest(
-                windowEvent -> {
-                    // consume the window event (the main window would be closed otherwise no matter what)
-                    windowEvent.consume();
-
-                    // quit the app
-                    // replace this hard close
-                    // by delegating the work to a suitable controller
-                    primaryStage.close();
-                }
-        );
+        primaryStage.setOnCloseRequest(windowEvent -> {
+            windowEvent.consume();
+            primaryStage.close();
+        });
 
         // SCAFFOLDING OF MAIN PANE
         BorderPane mainBorderPane = new BorderPane();
+
+        mainMenuView.setRootLayout(mainBorderPane);
+        mainMenuView.setGameboardView(gameBoardView);
+
+        mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
-        mainBorderPane.setCenter(this.gameBoardView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
 
         // SCENE
-        Scene scene = new Scene(mainBorderPane);
+        Scene scene = new Scene(mainBorderPane, 800, 600);
 
         // PRIMARY STAGE
         primaryStage.setTitle(MainFx.APP_TITLE);
@@ -81,5 +78,4 @@ public class MainFx extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
