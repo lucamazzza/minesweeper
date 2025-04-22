@@ -22,6 +22,7 @@ public class MainFx extends Application {
     private final ControlledFxView gameBoardView;
     private final MainMenuViewFxml mainMenuView;
     private final UncontrolledFxView userFeedbackView;
+    private final DifficultyView difficultyView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
 
@@ -34,6 +35,7 @@ public class MainFx extends Application {
         this.menuBarView = MenuBarViewFxml.getInstance();
         this.gameBoardView = GameBoardViewFxml.getInstance();
         this.userFeedbackView = UserFeedbackViewFxml.getInstance();
+        this.difficultyView = DifficultyView.getInstance();
 
         // CONTROLLERS
         this.gameEventHandler = GameController.getInstance();
@@ -44,6 +46,7 @@ public class MainFx extends Application {
         this.gameBoardView.initialize(this.playerEventHandler, this.gameModel);
         this.userFeedbackView.initialize(this.gameModel);
         this.mainMenuView.initialize(this.playerEventHandler, this.gameModel);
+
         GameController.getInstance().initialize(List.of(this.menuBarView, this.gameBoardView, this.userFeedbackView));
     }
 
@@ -58,8 +61,6 @@ public class MainFx extends Application {
         BorderPane mainBorderPane = new BorderPane();
 
         mainMenuView.setRootLayout(mainBorderPane);
-        mainMenuView.setGameboardView(gameBoardView);
-
         mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());

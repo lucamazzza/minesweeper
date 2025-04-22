@@ -1,5 +1,5 @@
 * {
-    -fx-font: normal .AppleSystemUIFont;
+    -fx-font: normal.AppleSystemUIFont;
 }
 .menu {
     -fx-start-margin: 0;
