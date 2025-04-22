@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -15,6 +17,13 @@ import java.net.URL;
 public class DifficultyView implements ControlledFxView {
 
     private static DifficultyView myself;
+
+    private BorderPane rootLayout;
+
+    public void setRootLayout(BorderPane rootLayout) {
+        this.rootLayout = rootLayout;
+    }
+
 
     @FXML
     private VBox difficultyView;
@@ -27,6 +36,12 @@ public class DifficultyView implements ControlledFxView {
 
     @FXML
     private Button hardButton;
+
+    @FXML
+    private Button hellButton;
+
+    @FXML
+    private Button surpassButton;
 
     private DifficultyView() {
         try {
@@ -53,15 +68,26 @@ public class DifficultyView implements ControlledFxView {
         easyButton.setOnAction(e -> showDifficultyAlert("Easy"));
         mediumButton.setOnAction(e -> showDifficultyAlert("Medium"));
         hardButton.setOnAction(e -> showDifficultyAlert("Hard"));
+        hellButton.setOnAction(e -> showDifficultyAlert("Hell"));
+        surpassButton.setOnAction(e -> showDifficultyAlert("Surpass Your Limits"));
     }
 
     private void showDifficultyAlert(String difficulty) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Difficulty Selected");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma nuova partita");
         alert.setHeaderText(null);
-        alert.setContentText("You selected: " + difficulty);
-        alert.showAndWait();
+        alert.setContentText("Stai per cominciare una nuova partita in " + difficulty.toLowerCase() + " mode. Vuoi continuare?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                System.out.println("Nuova partita avviata in modalità: " + difficulty);
+                rootLayout.setCenter(GameBoardViewFxml.getInstance().getNode());
+            } else {
+                System.out.println("Partita annullata");
+            }
+        });
     }
+
 
     @Override
     public Node getNode() {

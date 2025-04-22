@@ -65,6 +65,8 @@ public class MainFx extends Application {
         mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
+        DifficultyView.getInstance().setRootLayout(mainBorderPane);
+
 
         // SCENE
         Scene scene = new Scene(mainBorderPane, 800, 600);
