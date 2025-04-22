@@ -73,20 +73,53 @@ public class DifficultyView implements ControlledFxView {
     }
 
     private void showDifficultyAlert(String difficulty) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma nuova partita");
-        alert.setHeaderText(null);
-        alert.setContentText("Stai per cominciare una nuova partita in " + difficulty.toLowerCase() + " mode. Vuoi continuare?");
+        int minBombs = 0;
+        int maxBombs = 0;
+        String extraMessage = "";
 
+        switch (difficulty) {
+            case "Easy":
+                minBombs = 1;
+                maxBombs = 15;
+                break;
+            case "Medium":
+                minBombs = 16;
+                maxBombs = 30;
+                break;
+            case "Hard":
+                minBombs = 31;
+                maxBombs = 45;
+                break;
+            case "Hell":
+                minBombs = 55;
+                maxBombs = 60;
+                break;
+            case "Surpass Your Limits":
+                minBombs = 40;
+                maxBombs = 50;
+                extraMessage = "\nfurthermore you'll have to beat a timer!";
+                break;
+        }
+
+        int bombCount = minBombs + (int) (Math.random() * (maxBombs - minBombs + 1));
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm a new game");
+        alert.setHeaderText(null);
+        alert.setContentText("You're about to start a new game in " + difficulty.toLowerCase() + " mode."
+                + "\nNumber of bombs: " + bombCount + extraMessage + "\nDo you want to continue?");
+
+        int finalBombCount = bombCount;
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                System.out.println("Nuova partita avviata in modalità: " + difficulty);
+                System.out.println("New game started in: " + difficulty + " mode with " + finalBombCount + " bombs.");
                 rootLayout.setCenter(GameBoardViewFxml.getInstance().getNode());
             } else {
-                System.out.println("Partita annullata");
+                System.out.println("Game canceled");
             }
         });
     }
+
 
 
     @Override
