@@ -43,7 +43,7 @@ public class MainFx extends Application {
         this.menuBarView.initialize(this.gameEventHandler, this.gameModel);
         this.gameBoardView.initialize(this.playerEventHandler, this.gameModel);
         this.userFeedbackView.initialize(this.gameModel);
-        this.mainMenuView.initialize(this.playerEventHandler, this.gameModel); // ← AGGIUNTO QUI!
+        this.mainMenuView.initialize(this.playerEventHandler, this.gameModel);
         GameController.getInstance().initialize(List.of(this.menuBarView, this.gameBoardView, this.userFeedbackView));
     }
 

@@ -2,9 +2,12 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainMenuView" xmlns="http://javafx.com/javafx/8">
-    <VBox fx:id="vbox" alignment="CENTER" spacing="10" AnchorPane.topAnchor="250" AnchorPane.leftAnchor="325">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainMenuView" xmlns="http://javafx.com/javafx/8">
+    <VBox fx:id="vbox" alignment="CENTER" spacing="10">
         <Label fx:id="welcomeLabel" text="Welcome!" style="-fx-font-size: 24;"/>
-        <Button fx:id="startNewGameButton" text="Start a new game" style="-fx-font-size: 18;"/>
+        <Button fx:id="startNewGameButton" text="Start a new game" style="-fx-font-size: 18;" prefWidth="200"/>
+        <Button fx:id="loadGameButton" text="Load an old game" style="-fx-font-size: 18;" prefWidth="200"/>
+        <Button fx:id="rulesButton" text="Rules" style="-fx-font-size: 18;" prefWidth="200"/>
     </VBox>
-</AnchorPane>
+</StackPane>
+

@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -27,7 +27,13 @@ public class MainMenuViewFxml implements ControlledFxView {
     private Button startNewGameButton;
 
     @FXML
-    private AnchorPane mainMenuView;
+    private StackPane mainMenuView;
+
+    @FXML
+    private Button loadGameButton;
+
+    @FXML
+    private Button rulesButton;
 
     public void setRootLayout(BorderPane rootLayout) {
         this.rootLayout = rootLayout;
@@ -72,6 +78,27 @@ public class MainMenuViewFxml implements ControlledFxView {
                     rootLayout.setCenter(gameboardView.getNode());
                 }
             });
+        });
+
+        loadGameButton.setOnAction(event -> {
+            Alert loadAlert = new Alert(Alert.AlertType.INFORMATION);
+            loadAlert.setTitle("Load Game");
+            loadAlert.setHeaderText(null);
+            loadAlert.setContentText("Load game functionality not implemented yet.");
+            loadAlert.showAndWait();
+        });
+
+        rulesButton.setOnAction(event -> {
+            Alert rulesAlert = new Alert(Alert.AlertType.INFORMATION);
+            rulesAlert.setTitle("Game Rules");
+            rulesAlert.setHeaderText("Minesweeper Rules");
+            rulesAlert.setContentText("""
+            - Uncover all safe tiles without triggering a mine.
+            - Numbers indicate how many mines are adjacent.
+            - Right-click to flag suspected mines.
+            - Good luck!
+        """);
+            rulesAlert.showAndWait();
         });
     }
 
