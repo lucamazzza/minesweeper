@@ -4,7 +4,9 @@ import ch.supsi.minesweeper.model.AbstractModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -59,11 +61,20 @@ public class MainMenuViewFxml implements ControlledFxView {
 
     @Override
     public void initialize(EventHandler eventHandler, AbstractModel model) {
-
         startNewGameButton.setOnAction(event -> {
-            rootLayout.setCenter(gameboardView.getNode());
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("New Game");
+            confirmationAlert.setHeaderText(null);
+            confirmationAlert.setContentText("You are about to start a new game, do you want to continue?");
+
+            confirmationAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    rootLayout.setCenter(gameboardView.getNode());
+                }
+            });
         });
     }
+
 
     @Override
     public Node getNode() {
