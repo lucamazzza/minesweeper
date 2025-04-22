@@ -41,6 +41,7 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     @Override
     public void save() {
         // do whatever you must do to start a new game
+
         // then update your views
         this.views.forEach(DataView::update);
     }

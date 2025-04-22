@@ -11,11 +11,14 @@ public class TileModel extends AbstractModel implements TileEventHandler{
     private boolean isMarked;
     @Getter
     private boolean isExploded;
+    @Getter
+    private boolean isUncovered;
 
     public TileModel() {
         isBomb = false;
         isMarked = false;
         isExploded = false;
+        isUncovered = false;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class TileModel extends AbstractModel implements TileEventHandler{
 
     @Override
     public void uncover() {
+        isUncovered = true;
         if (isBomb) {
             isExploded = true;
         }
