@@ -1,4 +1,5 @@
 package ch.supsi.minesweeper.view;
+
 import ch.supsi.minesweeper.controller.EventHandler;
 import ch.supsi.minesweeper.model.AbstractModel;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class MainMenuViewFxml implements ControlledFxView {
 
     private static MainMenuViewFxml myself;
     private BorderPane rootLayout;
-    private ControlledFxView gameboardView;
+    private DifficultyView difficultyView;
 
     @FXML
     private Label welcomeLabel;
@@ -38,11 +39,6 @@ public class MainMenuViewFxml implements ControlledFxView {
     public void setRootLayout(BorderPane rootLayout) {
         this.rootLayout = rootLayout;
     }
-
-    public void setGameboardView(ControlledFxView gameboardView) {
-        this.gameboardView = gameboardView;
-    }
-
 
     private MainMenuViewFxml() {}
 
@@ -67,6 +63,9 @@ public class MainMenuViewFxml implements ControlledFxView {
 
     @Override
     public void initialize(EventHandler eventHandler, AbstractModel model) {
+        // Inizializza la DifficultyView
+        difficultyView = DifficultyView.getInstance();
+
         startNewGameButton.setOnAction(event -> {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("New Game");
@@ -75,7 +74,7 @@ public class MainMenuViewFxml implements ControlledFxView {
 
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    rootLayout.setCenter(gameboardView.getNode());
+                    rootLayout.setCenter(difficultyView.getNode());
                 }
             });
         });
@@ -101,7 +100,6 @@ public class MainMenuViewFxml implements ControlledFxView {
             rulesAlert.showAndWait();
         });
     }
-
 
     @Override
     public Node getNode() {

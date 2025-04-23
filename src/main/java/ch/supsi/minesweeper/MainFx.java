@@ -25,6 +25,7 @@ public class MainFx extends Application {
     private final ControlledFxView menuBarView;
     private final ControlledFxView gameBoardView;
     private final MainMenuViewFxml mainMenuView;
+    private final DifficultyView difficultyView;
     private final UncontrolledFxView userFeedbackView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
@@ -34,6 +35,7 @@ public class MainFx extends Application {
         this.gameModel = GameModel.getInstance();
 
         // VIEWS
+        this.difficultyView = DifficultyView.getInstance();
         this.mainMenuView = MainMenuViewFxml.getInstance();
         this.menuBarView = MenuBarViewFxml.getInstance();
         this.gameBoardView = GameBoardViewFxml.getInstance();
@@ -48,6 +50,8 @@ public class MainFx extends Application {
         this.gameBoardView.initialize(this.playerEventHandler, this.gameModel);
         this.userFeedbackView.initialize(this.gameModel);
         this.mainMenuView.initialize(this.playerEventHandler, this.gameModel);
+        this.difficultyView.initialize(this.playerEventHandler, this.gameModel);
+
         GameController.getInstance().initialize(List.of(this.menuBarView, this.gameBoardView, this.userFeedbackView));
     }
 
@@ -65,14 +69,14 @@ public class MainFx extends Application {
         BorderPane mainBorderPane = new BorderPane();
 
         mainMenuView.setRootLayout(mainBorderPane);
-        mainMenuView.setGameboardView(gameBoardView);
-
         mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
         // FIXME: Only on windows this must be performed????
         // mainBorderPane.setTop(this.menuBarView.getNode());
         mainBorderPane.setCenter(this.gameBoardView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
+        DifficultyView.getInstance().setRootLayout(mainBorderPane);
+
 
         // SCENE
         Scene scene = new Scene(mainBorderPane, 800, 600);
