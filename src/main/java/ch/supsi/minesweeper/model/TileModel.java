@@ -13,12 +13,23 @@ public class TileModel extends AbstractModel implements TileEventHandler{
     private boolean isExploded;
     @Getter
     private boolean isUncovered;
+    @Setter
+    @Getter
+    private int adjBombs;
 
     public TileModel() {
         isBomb = false;
         isMarked = false;
         isExploded = false;
         isUncovered = false;
+    }
+
+    public TileModel(final TileModel tile) {
+        isBomb = tile.isBomb;
+        isMarked = tile.isMarked;
+        isExploded = tile.isExploded;
+        isUncovered = tile.isUncovered;
+        adjBombs = tile.adjBombs;
     }
 
     @Override

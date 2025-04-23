@@ -1,6 +1,7 @@
 package ch.supsi.minesweeper.view;
 
 import ch.supsi.minesweeper.controller.EventHandler;
+import ch.supsi.minesweeper.controller.GameController;
 import ch.supsi.minesweeper.model.AbstractModel;
 import ch.supsi.minesweeper.model.GameModel;
 import ch.supsi.minesweeper.model.PlayerEventHandler;
@@ -25,7 +26,6 @@ public class GameBoardViewFxml implements ControlledFxView {
     private GameModel gameModel;
 
     private Button[][] buttons;
-    private TileModel[][] tiles;
 
     @FXML
     private GridPane containerPane;
@@ -49,7 +49,6 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     private void createMatrix(int rows, int cols) {
         buttons = new Button[rows][cols];
-        tiles = new TileModel[rows][cols];
 
         containerPane = new GridPane(); // Creating a GridPane to hold buttons
 
@@ -57,32 +56,28 @@ public class GameBoardViewFxml implements ControlledFxView {
         containerPane.setHgap(1); // Horizontal gap between buttons (5px)
         containerPane.setVgap(1); // Vertical gap between buttons (5px)
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                tiles[row][col] = new TileModel();
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
 
                 Button button = new Button();
                 button.setMinSize(40, 40);
-                int finalRow = row;
-                int finalCol = col;
+                int finalRow = r;
+                int finalCol = c;
                 button.setOnMousePressed(event -> handleButtonAction(event.getButton(), finalRow, finalCol));
-                buttons[row][col] = button;
-                containerPane.add(button, col, row);
+                buttons[r][c] = button;
+                containerPane.add(button, c, r);
             }
         }
     }
 
     private void handleButtonAction(MouseButton bType, int row, int col) {
-        TileModel tile = tiles[row][col];
         if (bType == MouseButton.PRIMARY) {
-            if (!tile.isUncovered() && !tile.isMarked()) {
-                tile.uncover();
-                updateButton(row, col);
-            }
-        } else if (bType == MouseButton.SECONDARY && !tile.isUncovered()) {
-                tile.flag();
-                updateButton(row, col);
-            }
+            GameController.getInstance().handleLeftClick(row, col);
+            updateButton(row, col);
+        } else if (bType == MouseButton.SECONDARY) {
+            GameController.getInstance().handleRightClick(row, col);
+            updateButton(row, col);
+        }
 
     }
 
@@ -99,15 +94,14 @@ public class GameBoardViewFxml implements ControlledFxView {
     }
 
     private void updateButton(int row, int col) {
-        TileModel tile = tiles[row][col];
         Button button = buttons[row][col];
-
+        TileModel tile = GameController.getInstance().getTile(row, col);
         if (tile.isUncovered()) {
             if (tile.isBomb()) {
                 button.setText("💣");
-                button.setStyle("-fx-background-color: red;"); // Example styling
+                button.setStyle("-fx-background-color: red;");
             } else {
-//                button.setText(tile.getSurroundingMines() == 0 ? "" : String.valueOf(tile.getSurroundingMines()));
+                button.setText(tile.getAdjBombs() == 0 ? "" : String.valueOf(tile.getAdjBombs()));
             }
             button.setDisable(true);
         } else if (tile.isMarked()) {

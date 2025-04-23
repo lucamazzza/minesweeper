@@ -23,7 +23,7 @@ public class MainFx extends Application {
 
     private final AbstractModel gameModel;
     private final ControlledFxView menuBarView;
-    private final ControlledFxView gameBoardView;
+    private final GameBoardViewFxml gameBoardView;
     private final UncontrolledFxView userFeedbackView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
