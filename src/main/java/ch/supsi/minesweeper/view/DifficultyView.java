@@ -1,6 +1,7 @@
 package ch.supsi.minesweeper.view;
 
 import ch.supsi.minesweeper.controller.EventHandler;
+import ch.supsi.minesweeper.controller.GameController;
 import ch.supsi.minesweeper.model.AbstractModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -113,6 +114,7 @@ public class DifficultyView implements ControlledFxView {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 System.out.println("New game started in: " + difficulty + " mode with " + finalBombCount + " bombs.");
+                GameController.getInstance().startNewGame(9, 9, finalBombCount);
                 rootLayout.setCenter(GameBoardViewFxml.getInstance().getNode());
             } else {
                 System.out.println("Game canceled");

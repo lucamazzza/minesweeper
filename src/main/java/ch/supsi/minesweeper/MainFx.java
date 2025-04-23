@@ -73,7 +73,7 @@ public class MainFx extends Application {
         mainBorderPane.setTop(this.menuBarView.getNode());
         // FIXME: Only on windows this must be performed????
         // mainBorderPane.setTop(this.menuBarView.getNode());
-        mainBorderPane.setCenter(this.gameBoardView.getNode());
+        //mainBorderPane.setCenter(this.gameBoardView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
         DifficultyView.getInstance().setRootLayout(mainBorderPane);
 

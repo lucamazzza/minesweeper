@@ -129,6 +129,12 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         }
     }
 
+    public void startNewGame(int rows, int cols, int bombCount) {
+        initTileMatrix(rows, cols, bombCount);
+        views.forEach(DataView::update);
+    }
+
+
     public TileModel getTile(int row, int col) {
         return new TileModel(tiles[row][col]);
     }
