@@ -6,8 +6,12 @@ import ch.supsi.minesweeper.model.GameEventHandler;
 import ch.supsi.minesweeper.model.GameModel;
 import ch.supsi.minesweeper.model.PlayerEventHandler;
 import ch.supsi.minesweeper.view.*;
+import de.jangassen.MenuToolkit;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -51,6 +55,9 @@ public class MainFx extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setOnCloseRequest(windowEvent -> {
             windowEvent.consume();
+                    // quit the app
+                    // replace this hard close
+                    // by delegating the work to a suitable controller
             primaryStage.close();
         });
 
@@ -62,10 +69,15 @@ public class MainFx extends Application {
 
         mainBorderPane.setCenter(mainMenuView.getNode());
         mainBorderPane.setTop(this.menuBarView.getNode());
+        // FIXME: Only on windows this must be performed????
+        // mainBorderPane.setTop(this.menuBarView.getNode());
+        mainBorderPane.setCenter(this.gameBoardView.getNode());
         mainBorderPane.setBottom(this.userFeedbackView.getNode());
 
         // SCENE
         Scene scene = new Scene(mainBorderPane, 800, 600);
+
+        scene.getStylesheets().add("/css/stylesheet.css");
 
         // PRIMARY STAGE
         primaryStage.setTitle(MainFx.APP_TITLE);
@@ -73,9 +85,14 @@ public class MainFx extends Application {
         primaryStage.setScene(scene);
         primaryStage.toFront();
         primaryStage.show();
+
+        MenuToolkit tk = MenuToolkit.toolkit();
+        MenuBar bar = (MenuBar) menuBarView.getNode();
+        tk.setMenuBar(primaryStage, bar);
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }
