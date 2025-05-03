@@ -12,6 +12,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Paint;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,11 +23,8 @@ import java.util.Date;
 public class GameBoardViewFxml implements ControlledFxView {
 
     private static GameBoardViewFxml self;
-
     private PlayerEventHandler playerEventHandler;
-
     private GameModel gameModel;
-
     private Button[][] buttons;
 
     @FXML
@@ -47,6 +47,41 @@ public class GameBoardViewFxml implements ControlledFxView {
         this.gameModel = (GameModel) model;
     }
 
+    @Override
+    public Node getNode() {
+        return this.containerPane;
+    }
+
+    @Override
+    public void update() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date date = new Date(System.currentTimeMillis());
+        System.out.println(this.getClass().getSimpleName() + " updated..." + dateFormat.format(date));
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                updateButton(r, c);
+            }
+        }
+    }
+
+    @Override
+    public void enable() {
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                setDisableButton(r, c, false);
+            }
+        }
+    }
+
+    @Override
+    public void disable() {
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                setDisableButton(r, c, true);
+            }
+        }
+    }
+
     private void createMatrix(int rows, int cols) {
         buttons = new Button[rows][cols];
 
@@ -61,6 +96,7 @@ public class GameBoardViewFxml implements ControlledFxView {
 
                 Button button = new Button();
                 button.setMinSize(40, 40);
+                button.setDisable(true);
                 int finalRow = r;
                 int finalCol = c;
                 button.setOnMousePressed(event -> handleButtonAction(event.getButton(), finalRow, finalCol));
@@ -78,19 +114,6 @@ public class GameBoardViewFxml implements ControlledFxView {
             GameController.getInstance().handleRightClick(row, col);
             updateButton(row, col);
         }
-
-    }
-
-    @Override
-    public Node getNode() {
-        return this.containerPane;
-    }
-
-    @Override
-    public void update() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date date = new Date(System.currentTimeMillis());
-        System.out.println(this.getClass().getSimpleName() + " updated..." + dateFormat.format(date));
     }
 
     private void updateButton(int row, int col) {
@@ -98,17 +121,37 @@ public class GameBoardViewFxml implements ControlledFxView {
         TileModel tile = GameController.getInstance().getTile(row, col);
         if (tile.isUncovered()) {
             if (tile.isBomb()) {
-                button.setText("💣");
+                FontIcon icon = new FontIcon(FontAwesome.BOMB);
+                icon.setIconSize(14);
+                icon.setIconColor(Paint.valueOf("white"));
+                button.setGraphic(icon);
                 button.setStyle("-fx-background-color: red;");
             } else {
                 button.setText(tile.getAdjBombs() == 0 ? "" : String.valueOf(tile.getAdjBombs()));
             }
             button.setDisable(true);
         } else if (tile.isMarked()) {
-            button.setText("🚩");
+            FontIcon icon = new FontIcon(FontAwesome.FLAG);
+            icon.setIconSize(14);
+            icon.setIconColor(Paint.valueOf("white"));
+            button.setGraphic(icon);
         } else {
+            button.setGraphic(null);
+            button.setStyle("-fx-background-color: #3b3b3b;");
             button.setText("");
         }
+    }
+
+    public void disableAllButtons() {
+        for (int r = 0; r < buttons.length; r++) {
+            for (int c = 0; c < buttons[0].length; c++) {
+                buttons[r][c].setDisable(true);
+            }
+        }
+    }
+
+    private void setDisableButton(int row, int col, boolean disable) {
+        buttons[row][col].setDisable(disable);
     }
 }
 

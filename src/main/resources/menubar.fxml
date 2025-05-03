@@ -6,7 +6,7 @@
         <MenuItem fx:id="aboutItem" mnemonicParsing="false" disable="false" text="About Minesweeper"/>
     </Menu>
     <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
-        <MenuItem fx:id="newMenuItem" mnemonicParsing="false" disable="true" text="New"/>
+        <MenuItem fx:id="newMenuItem" mnemonicParsing="false" disable="false" text="New"/>
         <MenuItem fx:id="openMenuItem" mnemonicParsing="false" disable="false" text="Open..."/>
         <SeparatorMenuItem fx:id="sep1" mnemonicParsing="false"/>
         <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" disable="true" text="Save"/>

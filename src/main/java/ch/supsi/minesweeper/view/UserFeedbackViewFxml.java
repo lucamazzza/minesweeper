@@ -15,37 +15,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserFeedbackViewFxml implements UncontrolledFxView {
-
-    private static UserFeedbackViewFxml myself;
-
+    private static UserFeedbackViewFxml self;
     private GameModel gameModel;
-
     @FXML
     private ScrollPane containerPane;
-
     @FXML
     private Text userFeedbackBar;
-
     private UserFeedbackViewFxml() {}
 
     public static UserFeedbackViewFxml getInstance() {
-        if (myself == null) {
-            myself = new UserFeedbackViewFxml();
-
+        if (self == null) {
+            self = new UserFeedbackViewFxml();
             try {
                 URL fxmlUrl = UserFeedbackViewFxml.class.getResource("/userfeedbackbar.fxml");
                 if (fxmlUrl != null) {
                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                    fxmlLoader.setController(myself);
+                    fxmlLoader.setController(self);
                     fxmlLoader.load();
                 }
-
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        return myself;
+        return self;
     }
 
     @Override
@@ -67,4 +59,13 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
         this.userFeedbackBar.setText(" updated..." + dateFormat.format(date));
     }
 
+    @Override
+    public void enable() {
+        System.out.println("UserFeedbackView Enabled");
+    }
+
+    @Override
+    public void disable() {
+        System.out.println("UserFeedbackView Disabled");
+    }
 }

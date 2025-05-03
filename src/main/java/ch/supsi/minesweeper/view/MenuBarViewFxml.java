@@ -16,21 +16,19 @@ import java.net.URL;
 
 public class MenuBarViewFxml implements ControlledFxView {
 
-    private static MenuBarViewFxml myself;
+    private static MenuBarViewFxml self;
 
     private GameEventHandler gameEventHandler;
     private GameModel gameModel;
 
     @FXML
     private MenuBar menuBar;
-
     @FXML
     private Menu fileMenu;
     @FXML
     private Menu editMenu;
     @FXML
     private Menu helpMenu;
-
     @FXML
     private MenuItem newMenuItem;
     @FXML
@@ -48,17 +46,17 @@ public class MenuBarViewFxml implements ControlledFxView {
     @FXML
     private MenuItem helpMenuItem;
 
-    private MenuBarViewFxml() {}
+    private MenuBarViewFxml() {
+    }
 
     public static MenuBarViewFxml getInstance() {
-        if (myself == null) {
-            myself = new MenuBarViewFxml();
-
+        if (self == null) {
+            self = new MenuBarViewFxml();
             try {
                 URL fxmlUrl = MenuBarViewFxml.class.getResource("/menubar.fxml");
                 if (fxmlUrl != null) {
                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                    fxmlLoader.setController(myself);
+                    fxmlLoader.setController(self);
                     fxmlLoader.load();
                 }
 
@@ -66,8 +64,7 @@ public class MenuBarViewFxml implements ControlledFxView {
                 throw new RuntimeException(e);
             }
         }
-
-        return myself;
+        return self;
     }
 
     @Override
@@ -80,10 +77,8 @@ public class MenuBarViewFxml implements ControlledFxView {
     private void createBehaviour() {
         // new
         this.newMenuItem.setOnAction(event -> this.gameEventHandler.newGame());
-
         // save
         this.saveMenuItem.setOnAction(event -> this.gameEventHandler.save());
-
         // add event handlers for all necessary menu items
         // ...
     }
@@ -100,4 +95,13 @@ public class MenuBarViewFxml implements ControlledFxView {
         System.out.println(this.getClass().getSimpleName() + " updated..." + System.currentTimeMillis());
     }
 
+    @Override
+    public void enable() {
+        System.out.println("MenuBarView Enabled");
+    }
+
+    @Override
+    public void disable() {
+        System.out.println("MenuBarView Disabled");
+    }
 }

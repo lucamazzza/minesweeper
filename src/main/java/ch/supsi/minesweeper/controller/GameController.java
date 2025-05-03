@@ -10,16 +10,13 @@ import java.util.List;
 import java.util.Random;
 
 public class GameController implements GameEventHandler, PlayerEventHandler {
-
     private static GameController self;
-
     private GameModel gameModel;
-
     private List<DataView> views;
-
     private TileModel[][] tiles;
+    private boolean gameOverState = false;
 
-    private GameController () {
+    private GameController() {
         this.gameModel = GameModel.getInstance();
     }
 
@@ -31,32 +28,23 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     }
 
     public void initialize(List<DataView> views) {
-        initTileMatrix(9, 9, 10);
         this.views = views;
     }
 
     @Override
     public void newGame() {
-        // do whatever you must do to start a new game
-
-        // then update your views
+        initTileMatrix(9, 9, 10);
+        this.views.forEach(DataView::enable);
         this.views.forEach(DataView::update);
     }
 
     @Override
     public void save() {
-        // do whatever you must do to start a new game
-
-        // then update your views
         this.views.forEach(DataView::update);
     }
 
-    // add all the relevant methods to handle all those defined by the GameEventHandler interface
-    // ...
-
     @Override
     public void action() {
-        this.gameModel.action();
         views.forEach(DataView::update);
     }
 
@@ -91,13 +79,11 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     private int countAdjBombs(int row, int col) {
         int count = 0;
         int[] directions = {-1, 0, 1};
-
         for (int dr : directions) {
             for (int dc : directions) {
-                if (dr == 0 && dc == 0) continue; // Skip the current tile
+                if (dr == 0 && dc == 0) continue;
                 int newRow = row + dr;
                 int newCol = col + dc;
-
                 if (newRow >= 0 && newRow < tiles.length && newCol >= 0 && newCol < tiles[0].length) {
                     if (tiles[newRow][newCol].isBomb()) {
                         count++;
@@ -112,13 +98,60 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         TileModel tile = tiles[row][col];
         if (!tile.isUncovered() && !tile.isMarked()) {
             tile.uncover();
+            if (tile.getAdjBombs() == 0) {
+                uncoverAdj(row, col);
+            }
             views.forEach(DataView::update);
             if (tile.isBomb()) {
-                // TODO: Handle game won
-            } else {
-                // TODO: Handle game won
+                gameOver(false);
+            } else if (checkVictory()) {
+                gameOver(true);
             }
         }
+    }
+
+    private void uncoverAdj(int row, int col) {
+        for (int r = -1; r <= 1; r++) {
+            for (int c = -1; c <= 1; c++) {
+                int newRow = row + r;
+                int newCol = col + c;
+                if (isValidTile(newRow, newCol) && !tiles[newRow][newCol].isUncovered()) {
+                    handleLeftClick(newRow, newCol);
+                }
+            }
+        }
+    }
+
+    private boolean checkVictory() {
+        for (int r = 0; r < tiles.length; r++) {
+            for (int c = 0; c < tiles[0].length; c++) {
+                if (!tiles[r][c].isBomb() && !tiles[r][c].isUncovered()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void gameOver(boolean won) {
+        for (int r = 0; r < tiles.length; r++) {
+            for (int c = 0; c < tiles[0].length; c++) {
+                tiles[r][c].uncover();
+            }
+        }
+        views.forEach(DataView::disable);
+        views.forEach(DataView::update);  // Aggiungi questa linea per aggiornare la vista
+        showAlert(won ? "Victory!" : "Game Over", won ? "Congratulations, you won!" : "Oops, you clicked on a bomb!");
+    }
+
+    private void showAlert(String title, String message) {
+        javafx.application.Platform.runLater(() -> {
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
     public void handleRightClick(int row, int col) {
@@ -129,13 +162,11 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         }
     }
 
-    public void startNewGame(int rows, int cols, int bombCount) {
-        initTileMatrix(rows, cols, bombCount);
-        views.forEach(DataView::update);
-    }
-
-
     public TileModel getTile(int row, int col) {
         return new TileModel(tiles[row][col]);
+    }
+
+    private boolean isValidTile(int row, int col) {
+        return row >= 0 && col >= 0 && row < tiles.length && col < tiles[0].length;
     }
 }
