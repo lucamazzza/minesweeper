@@ -2,10 +2,7 @@ package ch.supsi.minesweeper.view;
 
 import ch.supsi.minesweeper.controller.EventHandler;
 import ch.supsi.minesweeper.controller.GameController;
-import ch.supsi.minesweeper.model.AbstractModel;
-import ch.supsi.minesweeper.model.GameModel;
-import ch.supsi.minesweeper.model.PlayerEventHandler;
-import ch.supsi.minesweeper.model.TileModel;
+import ch.supsi.minesweeper.model.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -26,6 +23,17 @@ public class GameBoardViewFxml implements ControlledFxView {
     private PlayerEventHandler playerEventHandler;
     private GameModel gameModel;
     private Button[][] buttons;
+    private static final String[] adjacencyColors = {
+            "-fx-text-fill: white;",
+            "-fx-text-fill: #16b7b4;",
+            "-fx-text-fill: #16b73e;",
+            "-fx-text-fill: #cd8752;",
+            "-fx-text-fill: #476eca;",
+            "-fx-text-fill: #b71618;",
+            "-fx-text-fill: #16b76c;",
+            "-fx-text-fill: #ffffff;",
+            "-fx-text-fill: #7c7c7c;"
+    };
 
     @FXML
     private GridPane containerPane;
@@ -42,7 +50,7 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     @Override
     public void initialize(EventHandler eventHandler, AbstractModel model) {
-        this.createMatrix(9, 9);
+        this.createMatrix(Constant.GRID_HEIGHT, Constant.GRID_WIDTH);
         this.playerEventHandler = (PlayerEventHandler) eventHandler;
         this.gameModel = (GameModel) model;
     }
@@ -57,8 +65,8 @@ public class GameBoardViewFxml implements ControlledFxView {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date date = new Date(System.currentTimeMillis());
         System.out.println(this.getClass().getSimpleName() + " updated..." + dateFormat.format(date));
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
+        for (int r = 0; r < Constant.GRID_HEIGHT; r++) {
+            for (int c = 0; c < Constant.GRID_WIDTH; c++) {
                 updateButton(r, c);
             }
         }
@@ -66,8 +74,8 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     @Override
     public void enable() {
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
+        for (int r = 0; r < Constant.GRID_HEIGHT; r++) {
+            for (int c = 0; c < Constant.GRID_WIDTH; c++) {
                 setDisableButton(r, c, false);
             }
         }
@@ -75,8 +83,8 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     @Override
     public void disable() {
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
+        for (int r = 0; r < Constant.GRID_HEIGHT; r++) {
+            for (int c = 0; c < Constant.GRID_WIDTH; c++) {
                 setDisableButton(r, c, true);
             }
         }
@@ -125,8 +133,9 @@ public class GameBoardViewFxml implements ControlledFxView {
                 icon.setIconSize(14);
                 icon.setIconColor(Paint.valueOf("white"));
                 button.setGraphic(icon);
-                button.setStyle("-fx-background-color: red;");
+                button.setStyle("-fx-background-color: #ff0000;");
             } else {
+                button.setStyle(adjacencyColors[tile.getAdjBombs()]);
                 button.setText(tile.getAdjBombs() == 0 ? "" : String.valueOf(tile.getAdjBombs()));
             }
             button.setDisable(true);
@@ -139,14 +148,6 @@ public class GameBoardViewFxml implements ControlledFxView {
             button.setGraphic(null);
             button.setStyle("-fx-background-color: #3b3b3b;");
             button.setText("");
-        }
-    }
-
-    public void disableAllButtons() {
-        for (int r = 0; r < buttons.length; r++) {
-            for (int c = 0; c < buttons[0].length; c++) {
-                buttons[r][c].setDisable(true);
-            }
         }
     }
 
