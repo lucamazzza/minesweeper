@@ -21,7 +21,6 @@
             <version>17.0.14</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
