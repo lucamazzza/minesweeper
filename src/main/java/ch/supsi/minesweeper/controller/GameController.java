@@ -1,9 +1,6 @@
 package ch.supsi.minesweeper.controller;
 
-import ch.supsi.minesweeper.model.GameEventHandler;
-import ch.supsi.minesweeper.model.GameModel;
-import ch.supsi.minesweeper.model.PlayerEventHandler;
-import ch.supsi.minesweeper.model.TileModel;
+import ch.supsi.minesweeper.model.*;
 import ch.supsi.minesweeper.view.DataView;
 
 import java.util.List;
@@ -33,7 +30,7 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
 
     @Override
     public void newGame() {
-        initTileMatrix(9, 9, 10);
+        initTileMatrix(Constant.GRID_HEIGHT, Constant.GRID_WIDTH, Constant.DEFAULT_BOMBS);
         this.views.forEach(DataView::enable);
         this.views.forEach(DataView::update);
     }
