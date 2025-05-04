@@ -21,5 +21,6 @@ GridPane {
 
 .button:disabled {
     -fx-text-fill: white;
-    -fx-background-color: #595959
+    -fx-background-color: #323232;
+    -fx-font-weight: bold;
 }
