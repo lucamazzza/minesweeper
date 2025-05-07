@@ -1,5 +1,6 @@
 package ch.supsi.minesweeper.model;
 
+import ch.supsi.minesweeper.service.UserPreferences;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +26,7 @@ public class GameModel extends AbstractModel implements GameEventHandler {
     @Override
     public void newGame() {
         flagsPlaced = 0;
-        bombsAmount = Constant.DEFAULT_BOMBS;
+        bombsAmount = new UserPreferences().getBombs();
     }
 
     @Override
