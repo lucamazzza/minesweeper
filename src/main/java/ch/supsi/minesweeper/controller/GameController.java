@@ -30,7 +30,8 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
 
     @Override
     public void newGame() {
-        initTileMatrix(Constant.GRID_HEIGHT, Constant.GRID_WIDTH, Constant.DEFAULT_BOMBS);
+        gameModel.newGame();
+        initTileMatrix(Constant.GRID_HEIGHT, Constant.GRID_WIDTH, gameModel.getBombsAmount());
         this.views.forEach(DataView::enable);
         this.views.forEach(DataView::update);
     }
@@ -155,6 +156,7 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         TileModel tile = tiles[row][col];
         if (!tile.isUncovered()) {
             tile.flag();
+            if (tile.isMarked()) gameModel.incrementFlagsPlaced(); else gameModel.decrementFlagsPlaced();
             views.forEach(DataView::update);
         }
     }
