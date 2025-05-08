@@ -3,6 +3,8 @@ package ch.supsi.minesweeper.controller;
 import ch.supsi.minesweeper.model.*;
 import ch.supsi.minesweeper.view.DataView;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +44,7 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     }
 
     @Override
-    public void action() {
+    public void action(MouseEvent mouseEvent, int x, int y) {
         views.forEach(DataView::update);
     }
 
