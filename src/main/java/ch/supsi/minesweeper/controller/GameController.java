@@ -44,7 +44,31 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     }
 
     @Override
-    public void action(MouseEvent mouseEvent, int x, int y) {
+    public void leftClick(int row, int col) {
+        TileModel tile = tiles[row][col];
+        if (!tile.isUncovered() && !tile.isMarked()) {
+            tile.uncover();
+            if (tile.getAdjBombs() == 0) {
+                uncoverAdj(row, col);
+            }
+            views.forEach(DataView::update);
+            if (tile.isBomb()) {
+                gameOver(false);
+            } else if (checkVictory()) {
+                gameOver(true);
+            }
+        }
+        views.forEach(DataView::update);
+    }
+
+    @Override
+    public void rightClick(int row, int col) {
+        TileModel tile = tiles[row][col];
+        if (!tile.isUncovered()) {
+            tile.flag();
+            if (tile.isMarked()) gameModel.incrementFlagsPlaced(); else gameModel.decrementFlagsPlaced();
+            views.forEach(DataView::update);
+        }
         views.forEach(DataView::update);
     }
 
@@ -94,29 +118,13 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         return count;
     }
 
-    public void handleLeftClick(int row, int col) {
-        TileModel tile = tiles[row][col];
-        if (!tile.isUncovered() && !tile.isMarked()) {
-            tile.uncover();
-            if (tile.getAdjBombs() == 0) {
-                uncoverAdj(row, col);
-            }
-            views.forEach(DataView::update);
-            if (tile.isBomb()) {
-                gameOver(false);
-            } else if (checkVictory()) {
-                gameOver(true);
-            }
-        }
-    }
-
     private void uncoverAdj(int row, int col) {
         for (int r = -1; r <= 1; r++) {
             for (int c = -1; c <= 1; c++) {
                 int newRow = row + r;
                 int newCol = col + c;
                 if (isValidTile(newRow, newCol) && !tiles[newRow][newCol].isUncovered()) {
-                    handleLeftClick(newRow, newCol);
+                    rightClick(newRow, newCol);
                 }
             }
         }
@@ -152,15 +160,6 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
             alert.setContentText(message);
             alert.showAndWait();
         });
-    }
-
-    public void handleRightClick(int row, int col) {
-        TileModel tile = tiles[row][col];
-        if (!tile.isUncovered()) {
-            tile.flag();
-            if (tile.isMarked()) gameModel.incrementFlagsPlaced(); else gameModel.decrementFlagsPlaced();
-            views.forEach(DataView::update);
-        }
     }
 
     public TileModel getTile(int row, int col) {

@@ -116,10 +116,10 @@ public class GameBoardViewFxml implements ControlledFxView {
 
     private void handleButtonAction(MouseButton bType, int row, int col) {
         if (bType == MouseButton.PRIMARY) {
-            GameController.getInstance().handleLeftClick(row, col);
+            playerEventHandler.leftClick(row, col);
             updateButton(row, col);
         } else if (bType == MouseButton.SECONDARY) {
-            GameController.getInstance().handleRightClick(row, col);
+            playerEventHandler.rightClick(row, col);
             updateButton(row, col);
         }
     }
