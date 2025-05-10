@@ -1,7 +1,6 @@
 package ch.supsi.minesweeper.view;
 
 import ch.supsi.minesweeper.controller.EventHandler;
-import ch.supsi.minesweeper.controller.GameController;
 import ch.supsi.minesweeper.model.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -22,7 +21,7 @@ public class GameBoardViewFxml implements ControlledFxView {
     // HANDLERS
     private PlayerEventHandler playerEventHandler;
     // MODELS
-    private GameModel gameModel;
+    private GameModel gameModel; // Not currently
     private final BoardModel boardModel;
     // JAVAFX
     private Button[][] buttons;
