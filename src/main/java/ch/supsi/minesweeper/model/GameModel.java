@@ -4,16 +4,21 @@ import ch.supsi.minesweeper.service.UserPreferences;
 import lombok.Getter;
 import lombok.Setter;
 
-public class GameModel extends AbstractModel implements GameEventHandler {
+@Getter
+public class GameModel extends AbstractModel implements GameEventHandler, TileEventHandler {
     private static GameModel self;
-    @Getter
+    // MODELS
+    private final BoardModel boardModel;
+
     private int flagsPlaced;
-    @Getter
     @Setter
     private int bombsAmount;
+    private boolean gameOverState;
+    private boolean gameWon;
 
     private GameModel() {
         super();
+        boardModel = BoardModel.getInstance();
     }
 
     public static GameModel getInstance() {
@@ -27,6 +32,9 @@ public class GameModel extends AbstractModel implements GameEventHandler {
     public void newGame() {
         flagsPlaced = 0;
         bombsAmount = new UserPreferences().getBombs();
+        gameWon = false;
+        gameOverState = false;
+        boardModel.initializeTiles(bombsAmount);
     }
 
     @Override
@@ -34,13 +42,28 @@ public class GameModel extends AbstractModel implements GameEventHandler {
 
     }
 
-    public void incrementFlagsPlaced() {
-        this.flagsPlaced++;
+    @Override
+    public void flag(int row, int col) {
+        boardModel.flag(row, col);
+        updateFlagCount();
     }
 
-    public void decrementFlagsPlaced() {
-        if (flagsPlaced > 0) {
-            this.flagsPlaced--;
+    @Override
+    public void uncover(int row, int col) {
+        boardModel.uncover(row, col);
+        updateVictoryStatus();
+    }
+
+    private void updateFlagCount() {
+        flagsPlaced = boardModel.countFlaggedTiles();
+    }
+
+    private void updateVictoryStatus() {
+        if (bombsAmount == boardModel.countCoveredTiles()) {
+            gameOverState = true;
+            gameWon = true;
+            return;
         }
+        gameOverState = boardModel.checkBombExploded();
     }
 }
