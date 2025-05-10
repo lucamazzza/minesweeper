@@ -18,10 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class GameBoardViewFxml implements ControlledFxView {
-
     private static GameBoardViewFxml self;
+    // HANDLERS
     private PlayerEventHandler playerEventHandler;
+    // MODELS
     private GameModel gameModel;
+    private final BoardModel boardModel;
+    // JAVAFX
     private Button[][] buttons;
     private static final String[] adjacencyColors = {
             "-fx-text-fill: white;",
@@ -39,6 +42,7 @@ public class GameBoardViewFxml implements ControlledFxView {
     private GridPane containerPane;
 
     private GameBoardViewFxml() {
+        this.boardModel = BoardModel.getInstance();
     }
 
     public static GameBoardViewFxml getInstance() {
@@ -117,16 +121,17 @@ public class GameBoardViewFxml implements ControlledFxView {
     private void handleButtonAction(MouseButton bType, int row, int col) {
         if (bType == MouseButton.PRIMARY) {
             playerEventHandler.leftClick(row, col);
-            updateButton(row, col);
         } else if (bType == MouseButton.SECONDARY) {
             playerEventHandler.rightClick(row, col);
-            updateButton(row, col);
         }
     }
 
     private void updateButton(int row, int col) {
         Button button = buttons[row][col];
-        TileModel tile = GameController.getInstance().getTile(row, col);
+        TileModel tile = boardModel.getTile(row, col);
+        if (tile == null) {
+            return;
+        }
         if (tile.isUncovered()) {
             if (tile.isBomb()) {
                 FontIcon icon = new FontIcon(FontAwesome.BOMB);
