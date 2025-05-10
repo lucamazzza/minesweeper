@@ -3,18 +3,14 @@ package ch.supsi.minesweeper.model;
 import lombok.Getter;
 import lombok.Setter;
 
-public class TileModel extends AbstractModel implements TileEventHandler {
+@Getter
+public class TileModel extends AbstractModel {
     @Setter
-    @Getter
     private boolean isBomb;
-    @Getter
     private boolean isMarked;
-    @Getter
     private boolean isExploded;
-    @Getter
     private boolean isUncovered;
     @Setter
-    @Getter
     private int adjBombs;
 
     public TileModel() {
@@ -32,13 +28,17 @@ public class TileModel extends AbstractModel implements TileEventHandler {
         adjBombs = tile.adjBombs;
     }
 
-    @Override
     public void flag() {
+        if (isUncovered) {
+            return;
+        }
         isMarked = !isMarked;
     }
 
-    @Override
     public void uncover() {
+        if (isMarked || isUncovered) {
+            return;
+        }
         isUncovered = true;
         if (isBomb) {
             isExploded = true;
