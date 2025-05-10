@@ -3,17 +3,13 @@ package ch.supsi.minesweeper.controller;
 import ch.supsi.minesweeper.model.*;
 import ch.supsi.minesweeper.view.DataView;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Random;
 
 public class GameController implements GameEventHandler, PlayerEventHandler {
     private static GameController self;
+    // MODELS
     private GameModel gameModel;
     private List<DataView> views;
-    private TileModel[][] tiles;
-    private boolean gameOverState = false;
 
     private GameController() {
         this.gameModel = GameModel.getInstance();
@@ -33,7 +29,6 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
     @Override
     public void newGame() {
         gameModel.newGame();
-        initTileMatrix(Constant.GRID_HEIGHT, Constant.GRID_WIDTH, gameModel.getBombsAmount());
         this.views.forEach(DataView::enable);
         this.views.forEach(DataView::update);
     }
@@ -43,108 +38,32 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         this.views.forEach(DataView::update);
     }
 
+
+    // UNCOVER
     @Override
     public void leftClick(int row, int col) {
-        TileModel tile = tiles[row][col];
-        if (!tile.isUncovered() && !tile.isMarked()) {
-            tile.uncover();
-            if (tile.getAdjBombs() == 0) {
-                uncoverAdj(row, col);
-            }
-            views.forEach(DataView::update);
-            if (tile.isBomb()) {
-                gameOver(false);
-            } else if (checkVictory()) {
-                gameOver(true);
-            }
-        }
+        gameModel.uncover(row,col);
+        checkGameOver();
         views.forEach(DataView::update);
     }
 
+    // FLAG
     @Override
     public void rightClick(int row, int col) {
-        TileModel tile = tiles[row][col];
-        if (!tile.isUncovered()) {
-            tile.flag();
-            if (tile.isMarked()) gameModel.incrementFlagsPlaced(); else gameModel.decrementFlagsPlaced();
-            views.forEach(DataView::update);
-        }
+        gameModel.flag(row, col);
         views.forEach(DataView::update);
     }
 
-    private void initTileMatrix(int rows, int cols, int bombCount) {
-        this.tiles = new TileModel[rows][cols];
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                this.tiles[r][c] = new TileModel();
-            }
+    private void checkGameOver() {
+        if (!gameModel.isGameOverState()) {
+            return;
         }
-        int placedBombs = 0;
-        Random random = new Random();
-        while (placedBombs < bombCount) {
-            int randRow = random.nextInt(rows);
-            int randCol = random.nextInt(cols);
-            if (!tiles[randRow][randCol].isBomb()) {
-                tiles[randRow][randCol].setBomb(true);
-                placedBombs++;
-            }
-        }
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (!tiles[r][c].isBomb()) {
-                    tiles[r][c].setAdjBombs(countAdjBombs(r, c));
-                } else {
-                    tiles[r][c].setAdjBombs(-1);
+        boolean won = gameModel.isGameWon();
+        if (!won) {
+            for (int r = 0; r < Constant.GRID_HEIGHT; r++) {
+                for (int c = 0; c < Constant.GRID_WIDTH; c++) {
+                    gameModel.uncover(r, c);
                 }
-            }
-        }
-    }
-
-    private int countAdjBombs(int row, int col) {
-        int count = 0;
-        int[] directions = {-1, 0, 1};
-        for (int dr : directions) {
-            for (int dc : directions) {
-                if (dr == 0 && dc == 0) continue;
-                int newRow = row + dr;
-                int newCol = col + dc;
-                if (newRow >= 0 && newRow < tiles.length && newCol >= 0 && newCol < tiles[0].length) {
-                    if (tiles[newRow][newCol].isBomb()) {
-                        count++;
-                    }
-                }
-            }
-        }
-        return count;
-    }
-
-    private void uncoverAdj(int row, int col) {
-        for (int r = -1; r <= 1; r++) {
-            for (int c = -1; c <= 1; c++) {
-                int newRow = row + r;
-                int newCol = col + c;
-                if (isValidTile(newRow, newCol) && !tiles[newRow][newCol].isUncovered()) {
-                    rightClick(newRow, newCol);
-                }
-            }
-        }
-    }
-
-    private boolean checkVictory() {
-        for (int r = 0; r < tiles.length; r++) {
-            for (int c = 0; c < tiles[0].length; c++) {
-                if (!tiles[r][c].isBomb() && !tiles[r][c].isUncovered()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private void gameOver(boolean won) {
-        for (int r = 0; r < tiles.length; r++) {
-            for (int c = 0; c < tiles[0].length; c++) {
-                tiles[r][c].uncover();
             }
         }
         views.forEach(DataView::disable);
@@ -160,13 +79,5 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
             alert.setContentText(message);
             alert.showAndWait();
         });
-    }
-
-    public TileModel getTile(int row, int col) {
-        return new TileModel(tiles[row][col]);
-    }
-
-    private boolean isValidTile(int row, int col) {
-        return row >= 0 && col >= 0 && row < tiles.length && col < tiles[0].length;
     }
 }
