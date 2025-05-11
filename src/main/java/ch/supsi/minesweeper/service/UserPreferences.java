@@ -25,6 +25,10 @@ public class UserPreferences {
                     throw new IllegalArgumentException("Valore 'bombs' mancante.");
                 }
 
+                if (bombValue <= 0 || bombValue > 80) {
+                    throw new IllegalArgumentException("Valore 'bombs' non puo' essere nullo o maggiore di 0.");
+                }
+
                 this.bombs = bombValue.intValue();
             } catch (Exception e) {
                 System.err.println("Configurazione invalida o mancante. Uso valore di default. Errore: " + e.getMessage());
