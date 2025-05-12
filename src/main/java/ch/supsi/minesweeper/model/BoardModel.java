@@ -1,7 +1,5 @@
 package ch.supsi.minesweeper.model;
 
-import ch.supsi.minesweeper.view.DataView;
-
 import java.util.Random;
 
 public class BoardModel extends AbstractModel implements TileEventHandler{
@@ -10,7 +8,6 @@ public class BoardModel extends AbstractModel implements TileEventHandler{
     private static final int ROWS = 9, COLS = 9;
 
     private TileModel[][] tiles;
-    private int bombsAmount;
 
     public static BoardModel getInstance() {
         if (self == null) {
@@ -113,7 +110,6 @@ public class BoardModel extends AbstractModel implements TileEventHandler{
     }
 
     public void initializeTiles(int bombs) {
-        bombsAmount = bombs;
         this.tiles = new TileModel[ROWS][COLS];
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
