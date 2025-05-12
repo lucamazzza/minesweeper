@@ -59,11 +59,15 @@ public class GameModel extends AbstractModel implements GameEventHandler, TileEv
     }
 
     private void updateVictoryStatus() {
+        gameOverState = boardModel.checkBombExploded();
+        if (gameOverState) {
+            gameWon = false;
+            return;
+        }
         if (bombsAmount == boardModel.countCoveredTiles()) {
             gameOverState = true;
             gameWon = true;
             return;
         }
-        gameOverState = boardModel.checkBombExploded();
     }
 }
