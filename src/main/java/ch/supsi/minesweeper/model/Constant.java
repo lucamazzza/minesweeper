@@ -8,7 +8,7 @@ public final class Constant {
     // BOMB INVARIANTS /////////////////////////////////////////////////////////////////////////////////////////////////
     public static final int MIN_BOMBS       = 1;
     public static final int MAX_BOMBS       = TILE_COUNT - 1;
-    public static final int DEFAULT_BOMBS   = 10;
+    public static final int DEFAULT_BOMBS  = 10;
 
     private Constant() {}
 }
