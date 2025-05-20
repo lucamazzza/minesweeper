@@ -67,17 +67,6 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
             }
         }
         views.forEach(DataView::disable);
-        views.forEach(DataView::update);  // Aggiungi questa linea per aggiornare la vista
-        showAlert(won ? "Victory!" : "Game Over", won ? "Congratulations, you won!" : "Oops, you clicked on a bomb!");
-    }
-
-    private void showAlert(String title, String message) {
-        javafx.application.Platform.runLater(() -> {
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        });
+        views.forEach(DataView::update);
     }
 }
