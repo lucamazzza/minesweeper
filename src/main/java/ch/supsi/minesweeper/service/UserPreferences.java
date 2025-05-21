@@ -47,14 +47,11 @@ public class UserPreferences {
 
                 this.bombs = bombValue.intValue();
                 this.language = languageValue;
-            } catch (Exception e) {
-                if (e instanceof InvalidLanguageException) {
-                    this.language = DEFAULT_LANGUAGE;
-                }
-
-                if (e instanceof InvalidBombsException){
-                    this.bombs = DEFAULT_BOMBS;
-                }
+            } catch (InvalidLanguageException e) {
+                this.language = DEFAULT_LANGUAGE;
+                notifyUserInvalidConfig(e.getMessage());
+            } catch (InvalidBombsException e) {
+                this.bombs = DEFAULT_BOMBS;
                 notifyUserInvalidConfig(e.getMessage());
             }
         } else {
