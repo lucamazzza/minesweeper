@@ -7,9 +7,11 @@ import com.moandjiezana.toml.TomlWriter;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static ch.supsi.minesweeper.model.Constant.*;
@@ -21,8 +23,10 @@ public class UserPreferences {
     private String language;
     private ResourceBundle messages;
 
-
     public UserPreferences() {
+        this.language = DEFAULT_LANGUAGE;
+        this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
+
         if (Files.exists(CONFIG_PATH)) {
             try {
                 Toml toml = new Toml().read(CONFIG_PATH.toFile());
@@ -30,34 +34,42 @@ public class UserPreferences {
                 String languageValue = toml.getString("language");
 
                 if (languageValue == null || languageValue.isEmpty()) {
-                    throw new InvalidLanguageException("'language' value missing");
+                    throw new InvalidLanguageException("language_missing");
                 }
 
-                if (!languageValue.equals("en") && !languageValue.equals("it")){
-                    throw new InvalidLanguageException("'language' not valid" );
+                if (!languageValue.equals("en") && !languageValue.equals("it")) {
+                    throw new InvalidLanguageException("language_not_valid");
                 }
+
+                this.language = languageValue;
+                this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
 
                 if (bombValue == null) {
-                    throw new InvalidBombsException("'bombs' value missing");
+                    throw new InvalidBombsException("bombs_missing");
                 }
 
                 if (bombValue <= 0 || bombValue > 80) {
-                    throw new InvalidBombsException("'bombs' value out of range");
+                    throw new InvalidBombsException("bombs_out_of_range");
                 }
 
+
                 this.bombs = bombValue.intValue();
-                this.language = languageValue;
+
             } catch (InvalidLanguageException e) {
+                String translatedMsg = messages.getString(e.getMessageKey());
                 this.language = DEFAULT_LANGUAGE;
-                notifyUserInvalidConfig(e.getMessage());
+                this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
+                notifyUserInvalidConfig(translatedMsg);
             } catch (InvalidBombsException e) {
+                String translatedMsg = messages.getString(e.getMessageKey());
                 this.bombs = DEFAULT_BOMBS;
-                notifyUserInvalidConfig(e.getMessage());
+                notifyUserInvalidConfig(translatedMsg);
             }
         } else {
             createDefaultPreferences();
             this.bombs = DEFAULT_BOMBS;
             this.language = DEFAULT_LANGUAGE;
+            this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
             notifyUserConfigCreated();
         }
     }
@@ -66,7 +78,7 @@ public class UserPreferences {
         try {
             Files.createDirectories(CONFIG_PATH.getParent());
 
-            var config = new java.util.HashMap<String, Object>();
+            HashMap<String, Object> config = new HashMap<>();
             config.put("bombs", DEFAULT_BOMBS);
             config.put("language", DEFAULT_LANGUAGE);
 
@@ -79,10 +91,17 @@ public class UserPreferences {
     private void notifyUserConfigCreated() {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Configuration Created");
-            alert.setHeaderText("User Configuration Initialized");
-            alert.setContentText("The configuration file was missing and has now been created at:\n" + CONFIG_PATH.toAbsolutePath()
-            + " with a default value of " + DEFAULT_BOMBS + " bombs and the default language " + DEFAULT_LANGUAGE);
+            alert.setTitle(messages.getString("config_created_title"));
+            alert.setHeaderText(messages.getString("config_created_header"));
+
+            String content = MessageFormat.format(
+                    messages.getString("config_created_message"),
+                    CONFIG_PATH.toAbsolutePath(),
+                    DEFAULT_BOMBS,
+                    DEFAULT_LANGUAGE
+            );
+
+            alert.setContentText(content);
             alert.showAndWait();
         });
     }
@@ -90,13 +109,18 @@ public class UserPreferences {
     private void notifyUserInvalidConfig(String errorMessage) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid Configuration");
-            alert.setHeaderText("Invalid or Missing Value");
-            alert.setContentText(errorMessage + " default value will be used");
+            alert.setTitle(messages.getString("invalid_config_title"));
+            alert.setHeaderText(messages.getString("invalid_config_header"));
+
+            String content = MessageFormat.format(
+                    messages.getString("invalid_config_message"),
+                    errorMessage
+            );
+
+            alert.setContentText(content);
             alert.showAndWait();
         });
     }
-
 
     public int getBombs() {
         return bombs;
@@ -104,5 +128,9 @@ public class UserPreferences {
 
     public String getLanguage() {
         return language;
+    }
+
+    public ResourceBundle getMessages() {
+        return messages;
     }
 }
