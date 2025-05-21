@@ -9,6 +9,7 @@ public final class Constant {
     public static final int MIN_BOMBS       = 1;
     public static final int MAX_BOMBS       = TILE_COUNT - 1;
     public static final int DEFAULT_BOMBS   = 10;
+    public static final String DEFAULT_LANGUAGE = "en";
 
     private Constant() {}
 }
