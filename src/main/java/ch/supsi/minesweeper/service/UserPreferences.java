@@ -10,6 +10,8 @@ import javafx.scene.control.Alert;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ResourceBundle;
+
 import static ch.supsi.minesweeper.model.Constant.*;
 
 public class UserPreferences {
@@ -17,6 +19,8 @@ public class UserPreferences {
 
     private int bombs;
     private String language;
+    private ResourceBundle messages;
+
 
     public UserPreferences() {
         if (Files.exists(CONFIG_PATH)) {
@@ -44,6 +48,13 @@ public class UserPreferences {
                 this.bombs = bombValue.intValue();
                 this.language = languageValue;
             } catch (Exception e) {
+                if (e instanceof InvalidLanguageException) {
+                    this.language = DEFAULT_LANGUAGE;
+                }
+
+                if (e instanceof InvalidBombsException){
+                    this.bombs = DEFAULT_BOMBS;
+                }
                 notifyUserInvalidConfig(e.getMessage());
             }
         } else {
@@ -64,7 +75,7 @@ public class UserPreferences {
 
             new TomlWriter().write(config, CONFIG_PATH.toFile());
         } catch (IOException e) {
-            System.err.println("Errore nella creazione del file di configurazione.");
+            System.err.println("Error creating configuration file");
         }
     }
 
@@ -92,5 +103,9 @@ public class UserPreferences {
 
     public int getBombs() {
         return bombs;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }
