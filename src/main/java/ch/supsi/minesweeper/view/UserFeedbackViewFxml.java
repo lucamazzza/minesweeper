@@ -16,10 +16,13 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 public class UserFeedbackViewFxml implements UncontrolledFxView {
     private static UserFeedbackViewFxml self;
     private GameModel gameModel;
+    private ResourceBundle bundle;
+
     @FXML
     private ScrollPane containerPane;
     @FXML
@@ -30,18 +33,24 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
     private Text bombCount;
     @FXML
     private Text flagCount;
-
     @FXML
     private Text userFeedbackBar;
+
     private UserFeedbackViewFxml() {}
 
-    public static UserFeedbackViewFxml getInstance() {
+    public UserFeedbackViewFxml(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+
+
+    public static UserFeedbackViewFxml getInstance(ResourceBundle bundle) {
         if (self == null) {
-            self = new UserFeedbackViewFxml();
+            self = new UserFeedbackViewFxml(bundle);
             try {
                 URL fxmlUrl = UserFeedbackViewFxml.class.getResource("/userfeedbackbar.fxml");
                 if (fxmlUrl != null) {
-                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl, bundle);
                     fxmlLoader.setController(self);
                     fxmlLoader.load();
                 }
@@ -51,6 +60,7 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
         }
         return self;
     }
+
 
     @Override
     public void initialize(AbstractModel model) {
@@ -70,16 +80,17 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
         flagCount.setText(gameModel.getBombsAmount() - gameModel.getFlagsPlaced() + "");
         if (gameModel.isGameOverState()) {
             if (gameModel.isGameWon()) {
-                userFeedbackBar.setText("You Won!");
+                userFeedbackBar.setText(bundle.getString("userfeedback_win"));
                 userFeedbackBar.setStyle("-fx-fill: green;");
             } else {
-                userFeedbackBar.setText("Game Over!");
+                userFeedbackBar.setText(bundle.getString("userfeedback_lose"));
                 userFeedbackBar.setStyle("-fx-fill: red;");
             }
         } else {
-            userFeedbackBar.setText("Game in progress...");
+            userFeedbackBar.setText(bundle.getString("userfeedback_in_progress"));
             userFeedbackBar.setStyle("-fx-fill: black;");
         }
+
     }
 
     @Override

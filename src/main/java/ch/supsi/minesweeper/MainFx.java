@@ -5,6 +5,7 @@ import ch.supsi.minesweeper.model.AbstractModel;
 import ch.supsi.minesweeper.model.GameEventHandler;
 import ch.supsi.minesweeper.model.GameModel;
 import ch.supsi.minesweeper.model.PlayerEventHandler;
+import ch.supsi.minesweeper.service.UserPreferences;
 import ch.supsi.minesweeper.view.*;
 import de.jangassen.MenuToolkit;
 import javafx.application.Application;
@@ -17,7 +18,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class MainFx extends Application {
     public static final String APP_TITLE = "mine sweeper";
@@ -27,14 +30,18 @@ public class MainFx extends Application {
     private final UncontrolledFxView userFeedbackView;
     private final GameEventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
+    private final ResourceBundle bundle;
+
 
     public MainFx() {
+        UserPreferences preferences = new UserPreferences();
+        this.bundle = preferences.getMessages();
         // GAME MODEL
         this.gameModel = GameModel.getInstance();
         // VIEWS
         this.menuBarView = MenuBarViewFxml.getInstance();
         this.gameBoardView = GameBoardViewFxml.getInstance();
-        this.userFeedbackView = UserFeedbackViewFxml.getInstance();
+        this.userFeedbackView = UserFeedbackViewFxml.getInstance(bundle);
         // CONTROLLERS
         this.gameEventHandler = GameController.getInstance();
         this.playerEventHandler = GameController.getInstance();
