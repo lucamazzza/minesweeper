@@ -65,9 +65,15 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
     @Override
     public void initialize(AbstractModel model) {
         this.gameModel = (GameModel) model;
+
         bombIcon.setGraphic(new FontIcon(FontAwesome.BOMB));
         flagIcon.setGraphic(new FontIcon(FontAwesome.FLAG));
+
+
+        userFeedbackBar.setText(bundle.getString("welcome_message"));
+        userFeedbackBar.setStyle("-fx-fill: black;");
     }
+
 
     @Override
     public Node getNode() {

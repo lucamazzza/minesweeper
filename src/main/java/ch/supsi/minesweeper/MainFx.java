@@ -39,14 +39,15 @@ public class MainFx extends Application {
         // GAME MODEL
         this.gameModel = GameModel.getInstance();
         // VIEWS
-        this.menuBarView = MenuBarViewFxml.getInstance();
+        this.menuBarView = MenuBarViewFxml.getInstance(bundle);
         this.gameBoardView = GameBoardViewFxml.getInstance();
         this.userFeedbackView = UserFeedbackViewFxml.getInstance(bundle);
         // CONTROLLERS
         this.gameEventHandler = GameController.getInstance();
         this.playerEventHandler = GameController.getInstance();
         // SCAFFOLDING of M-V-C
-        this.menuBarView.initialize(this.gameEventHandler, this.gameModel);
+        ((MenuBarViewFxml) menuBarView).setResourceBundle(this.bundle);
+        menuBarView.initialize(this.gameEventHandler, this.gameModel);
         this.gameBoardView.initialize(this.playerEventHandler, this.gameModel);
         this.userFeedbackView.initialize(this.gameModel);
         GameController.getInstance().initialize(List.of(this.menuBarView, this.gameBoardView, this.userFeedbackView));

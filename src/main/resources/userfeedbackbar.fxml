@@ -22,6 +22,6 @@
             </HBox>
         </HBox>
         <Region fx:id="spacer" HBox.hgrow="ALWAYS" prefWidth="100"/>
-        <Text fx:id="userFeedbackBar" text="Welcome to Minesweeper!"/>
+        <Text fx:id="userFeedbackBar"/>
     </HBox>
 </ScrollPane>
