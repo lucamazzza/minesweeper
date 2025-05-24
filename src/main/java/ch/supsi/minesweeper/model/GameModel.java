@@ -31,7 +31,7 @@ public class GameModel extends AbstractModel implements GameEventHandler, TileEv
     @Override
     public void newGame() {
         flagsPlaced = 0;
-        bombsAmount = new UserPreferences().getBombs();
+        bombsAmount = UserPreferences.getInstance().getBombs();
         gameWon = false;
         gameOverState = false;
         boardModel.initializeTiles(bombsAmount);

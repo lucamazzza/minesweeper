@@ -34,7 +34,7 @@ public class MainFx extends Application {
 
 
     public MainFx() {
-        UserPreferences preferences = new UserPreferences();
+        UserPreferences preferences = UserPreferences.getInstance();
         this.bundle = preferences.getMessages();
         // GAME MODEL
         this.gameModel = GameModel.getInstance();
