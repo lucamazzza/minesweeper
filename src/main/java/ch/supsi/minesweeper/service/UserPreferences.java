@@ -28,43 +28,35 @@ public class UserPreferences {
         this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
 
         if (Files.exists(CONFIG_PATH)) {
-            try {
-                Toml toml = new Toml().read(CONFIG_PATH.toFile());
-                Long bombValue = toml.getLong("bombs");
-                String languageValue = toml.getString("language");
+            Toml toml = new Toml().read(CONFIG_PATH.toFile());
+            Long bombValue = toml.getLong("bombs");
+            String languageValue = toml.getString("language");
 
-                if (languageValue == null || languageValue.isEmpty()) {
-                    throw new InvalidLanguageException("language_missing");
-                }
-
-                if (!languageValue.equals("en") && !languageValue.equals("it")) {
-                    throw new InvalidLanguageException("language_not_valid");
-                }
-
-                this.language = languageValue;
-                this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
-
-                if (bombValue == null) {
-                    throw new InvalidBombsException("bombs_missing");
-                }
-
-                if (bombValue <= 0 || bombValue > 80) {
-                    throw new InvalidBombsException("bombs_out_of_range");
-                }
-
-
-                this.bombs = bombValue.intValue();
-
-            } catch (InvalidLanguageException e) {
-                String translatedMsg = messages.getString(e.getMessageKey());
-                this.language = DEFAULT_LANGUAGE;
-                this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
-                notifyUserInvalidConfig(translatedMsg);
-            } catch (InvalidBombsException e) {
-                String translatedMsg = messages.getString(e.getMessageKey());
-                this.bombs = DEFAULT_BOMBS;
-                notifyUserInvalidConfig(translatedMsg);
+            if (languageValue == null || languageValue.isEmpty()) {
+                notifyInvalidLanguage("language_missing");
+                return;
             }
+
+            if (!languageValue.equals("en") && !languageValue.equals("it")) {
+                notifyInvalidLanguage("language_not_valid");
+                return;
+            }
+
+            this.language = languageValue;
+            this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
+
+            if (bombValue == null) {
+                notifyInvalidBombs("bombs_missing");
+                return;
+            }
+
+            if (bombValue <= 0 || bombValue > 80) {
+                notifyInvalidBombs("bombs_out_of_range");
+                return;
+            }
+
+            this.bombs = bombValue.intValue();
+
         } else {
             createDefaultPreferences();
             this.bombs = DEFAULT_BOMBS;
@@ -120,6 +112,19 @@ public class UserPreferences {
             alert.setContentText(content);
             alert.showAndWait();
         });
+    }
+
+    private void notifyInvalidBombs(String messageKey) {
+        String translatedMsg = messages.getString(messageKey);
+        this.bombs = DEFAULT_BOMBS;
+        notifyUserInvalidConfig(translatedMsg);
+    }
+
+    private void notifyInvalidLanguage(String messageKey) {
+        String translatedMsg = messages.getString(messageKey);
+        this.language = DEFAULT_LANGUAGE;
+        this.messages = ResourceBundle.getBundle("messages", new Locale(this.language));
+        notifyUserInvalidConfig(translatedMsg);
     }
 
     public int getBombs() {
