@@ -1,6 +1,6 @@
 package ch.supsi.minesweeper.view;
 
-import ch.supsi.minesweeper.controller.EventHandler;
+import ch.supsi.minesweeper.model.EventHandler;
 import ch.supsi.minesweeper.model.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

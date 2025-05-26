@@ -1,24 +1,16 @@
 package ch.supsi.minesweeper;
 
 import ch.supsi.minesweeper.controller.GameController;
-import ch.supsi.minesweeper.model.AbstractModel;
-import ch.supsi.minesweeper.model.GameEventHandler;
-import ch.supsi.minesweeper.model.GameModel;
-import ch.supsi.minesweeper.model.PlayerEventHandler;
+import ch.supsi.minesweeper.model.*;
 import ch.supsi.minesweeper.service.UserPreferences;
 import ch.supsi.minesweeper.view.*;
-import de.jangassen.MenuToolkit;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -28,7 +20,7 @@ public class MainFx extends Application {
     private final ControlledFxView menuBarView;
     private final ControlledFxView gameBoardView;
     private final UncontrolledFxView userFeedbackView;
-    private final GameEventHandler gameEventHandler;
+    private final EventHandler gameEventHandler;
     private final PlayerEventHandler playerEventHandler;
     private final ResourceBundle bundle;
 

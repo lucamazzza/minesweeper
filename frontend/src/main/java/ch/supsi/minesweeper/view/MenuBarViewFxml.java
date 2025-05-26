@@ -1,6 +1,6 @@
 package ch.supsi.minesweeper.view;
 
-import ch.supsi.minesweeper.controller.EventHandler;
+import ch.supsi.minesweeper.model.EventHandler;
 import ch.supsi.minesweeper.model.AbstractModel;
 import ch.supsi.minesweeper.model.GameEventHandler;
 import ch.supsi.minesweeper.model.GameModel;
@@ -116,7 +116,7 @@ public class MenuBarViewFxml implements ControlledFxView {
     @Override
     public void update() {
         // get your data from the model, if needed
-        // then update this view here
+        // then update this ch.supsi.minesweeper.view here
         System.out.println(this.getClass().getSimpleName() + " updated..." + System.currentTimeMillis());
     }
 

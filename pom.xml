@@ -7,6 +7,11 @@
     <groupId>ch.supsi.minesweeper</groupId>
     <artifactId>minesweeper</artifactId>
     <version>1.1.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>backend</module>
+        <module>frontend</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -70,7 +75,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>ch.supsi.minesweeper.Main</mainClass>
+                    <mainClass>ch.supsi.minesweeper.ch.supsi.minesweeper.Main</mainClass>
                 </configuration>
             </plugin>
 
@@ -87,7 +92,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ch.supsi.minesweeper.Main</mainClass>
+                            <mainClass>ch.supsi.minesweeper.ch.supsi.minesweeper.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

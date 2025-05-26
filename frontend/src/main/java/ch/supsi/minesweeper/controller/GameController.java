@@ -1,6 +1,9 @@
 package ch.supsi.minesweeper.controller;
 
-import ch.supsi.minesweeper.model.*;
+import ch.supsi.minesweeper.model.Constant;
+import ch.supsi.minesweeper.model.GameEventHandler;
+import ch.supsi.minesweeper.model.GameModel;
+import ch.supsi.minesweeper.model.PlayerEventHandler;
 import ch.supsi.minesweeper.view.DataView;
 
 import java.util.List;
