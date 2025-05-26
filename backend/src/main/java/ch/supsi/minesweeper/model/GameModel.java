@@ -43,6 +43,16 @@ public class GameModel extends AbstractModel implements GameEventHandler, TileEv
     }
 
     @Override
+    public void load() {
+
+    }
+
+    @Override
+    public void quit() {
+
+    }
+
+    @Override
     public void flag(int row, int col) {
         boardModel.flag(row, col);
         updateFlagCount();

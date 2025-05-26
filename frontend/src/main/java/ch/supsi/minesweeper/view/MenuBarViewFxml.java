@@ -23,7 +23,6 @@ public class MenuBarViewFxml implements ControlledFxView {
     private GameModel gameModel;
     private ResourceBundle bundle;
 
-
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -104,8 +103,10 @@ public class MenuBarViewFxml implements ControlledFxView {
         this.newMenuItem.setOnAction(event -> this.gameEventHandler.newGame());
         // save
         this.saveMenuItem.setOnAction(event -> this.gameEventHandler.save());
-        // add event handlers for all necessary menu items
-        // ...
+        // load
+        this.openMenuItem.setOnAction(event -> this.gameEventHandler.load());
+        // quit
+        this.quitMenuItem.setOnAction(event -> this.gameEventHandler.quit());
     }
 
     @Override

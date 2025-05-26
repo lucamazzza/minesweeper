@@ -41,6 +41,15 @@ public class GameController implements GameEventHandler, PlayerEventHandler {
         this.views.forEach(DataView::update);
     }
 
+    @Override
+    public void load() {
+
+    }
+
+    @Override
+    public void quit() {
+
+    }
 
     // UNCOVER
     @Override

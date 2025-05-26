@@ -4,4 +4,8 @@ public interface GameEventHandler extends EventHandler {
     void newGame();
 
     void save();
+
+    void load();
+
+    void quit();
 }
