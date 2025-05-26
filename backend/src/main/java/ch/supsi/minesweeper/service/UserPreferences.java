@@ -91,12 +91,14 @@ public class UserPreferences {
             }
         }
     }
+
     private void createDefaultPreferences() {
         try {
             Files.createDirectories(CONFIG_PATH.getParent());
             HashMap<String, Object> config = new HashMap<>();
             config.put("bombs", DEFAULT_BOMBS);
             config.put("language", DEFAULT_LANGUAGE);
+            config.put("save-path", DEFAULT_SAVE_FOLDER.toString());
             new TomlWriter().write(config, CONFIG_PATH.toFile());
         } catch (IOException e) {
             System.err.println("Error creating configuration file");

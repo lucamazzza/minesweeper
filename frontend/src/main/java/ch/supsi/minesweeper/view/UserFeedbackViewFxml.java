@@ -39,8 +39,6 @@ public class UserFeedbackViewFxml implements UncontrolledFxView {
         this.bundle = bundle;
     }
 
-
-
     public static UserFeedbackViewFxml getInstance(ResourceBundle bundle) {
         if (self == null) {
             self = new UserFeedbackViewFxml(bundle);

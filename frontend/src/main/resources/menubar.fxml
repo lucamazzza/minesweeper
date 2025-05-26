@@ -2,9 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <Menu fx:id="minesweeperMenu" mnemonicParsing="false" text="%menu_minesweeper">
-        <MenuItem fx:id="aboutItem" mnemonicParsing="false" disable="false" text="%menu_about_minesweeper"/>
-    </Menu>
     <Menu fx:id="fileMenu" mnemonicParsing="false" text="%menu_file">
         <MenuItem fx:id="newMenuItem" mnemonicParsing="false" disable="false" text="%menu_new"/>
         <MenuItem fx:id="openMenuItem" mnemonicParsing="false" disable="false" text="%menu_open"/>
