@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Region?>
+<ScrollPane fx:id="containerPane" prefWidth="1" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="3" right="11" bottom="1" left="11"/>
+    </padding>
+    <HBox spacing="10" alignment="CENTER" prefWidth="400">
+        <HBox spacing="10">
+            <HBox spacing="5">
+                <Label fx:id="bombIcon" styleClass="icon"/>
+                <Text fx:id="bombCount" text="10"/>
+            </HBox>
+            <HBox spacing="5">
+                <Label fx:id="flagIcon" styleClass="icon"/>
+                <Text fx:id="flagCount" text="10"/>
+            </HBox>
+        </HBox>
+        <Region fx:id="spacer" HBox.hgrow="ALWAYS" prefWidth="100"/>
+        <Text fx:id="userFeedbackBar"/>
+    </HBox>
+</ScrollPane>
