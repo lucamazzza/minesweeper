@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <Menu fx:id="fileMenu" mnemonicParsing="false" text="%menu_file">
+        <MenuItem fx:id="newMenuItem" mnemonicParsing="false" disable="false" text="%menu_new"/>
+        <MenuItem fx:id="openMenuItem" mnemonicParsing="false" disable="false" text="%menu_open"/>
+        <SeparatorMenuItem fx:id="sep1" mnemonicParsing="false"/>
+        <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" disable="true" text="%menu_save"/>
+        <MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" disable="true" text="%menu_save_as"/>
+        <SeparatorMenuItem fx:id="sep2" mnemonicParsing="false"/>
+        <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" disable="false" text="%menu_quit"/>
+    </Menu>
+    <Menu fx:id="editMenu" mnemonicParsing="false" text="%menu_edit">
+        <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" disable="false" text="%menu_preferences"/>
+    </Menu>
+    <Menu fx:id="helpMenu" mnemonicParsing="false" text="%menu_help">
+        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" disable="false" text="%menu_about"/>
+        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" disable="false" text="%menu_help"/>
+    </Menu>
+</MenuBar>

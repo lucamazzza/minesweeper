@@ -1,0 +1,26 @@
+.menu {
+    -fx-start-margin: 0;
+}
+
+GridPane {
+    -fx-background-color: #3b3b3b;
+}
+
+.button {
+    -fx-background-color: #3b3b3b;
+    -fx-text-fill: white;
+    -fx-border-color: #595959;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.button:pressed {
+    -fx-background-color: #464646;
+}
+
+.button:disabled {
+    -fx-text-fill: white;
+    -fx-background-color: #323232;
+    -fx-font-weight: bold;
+}
