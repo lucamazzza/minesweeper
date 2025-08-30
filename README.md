@@ -1,4 +1,4 @@
-# Minesweeper (JavaFX)
+# Minesweeper 💣
 
 University project for the course “Software Engineering I”.  
 Two‑month, team-based project implementing the classic Minesweeper game with a JavaFX user interface and an MVC-inspired architecture.
