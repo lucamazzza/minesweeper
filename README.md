@@ -1,93 +1,113 @@
-# minesweeper
+# Minesweeper (JavaFX)
 
+University project for the course “Software Engineering I”.  
+Two‑month, team-based project implementing the classic Minesweeper game with a JavaFX user interface and an MVC-inspired architecture.
 
+## Overview
+This repository contains a desktop implementation of Minesweeper. The application is built in Java with a JavaFX UI and follows a clear separation of concerns between models, views, and controllers. It includes user preferences and basic internationalization support.
+
+## Features
+- Classic Minesweeper gameplay
+  - Reveal cells, flag suspected mines, number hints indicate adjacent mines
+  - Mine counter and in-game feedback
+- Configurable board (size/mines) and game options
+- JavaFX user interface with FXML-based views and CSS styling
+- Internationalization via resource bundles (language can be selected in preferences)
+- Persistent user preferences (e.g., language)
+- Desktop integration
+  - Application icon
+  - On macOS, menu bar integration with the system menu
+
+## Tech stack
+- Java (recommended: 17 or later)
+- JavaFX (controls, FXML)
+- CSS (JavaFX styling)
+
+## Project structure
+The project is organized with a frontend module hosting the JavaFX application.
+
+- frontend/
+  - src/main/java/ch/supsi/minesweeper/
+    - MainFx.java — JavaFX application entry point
+    - controller/ — UI and game controllers (e.g., GameController, UserPreferencesController)
+    - model/ — game and board state (e.g., GameModel, BoardModel)
+    - view/ — FXML-backed views (e.g., MenuBarViewFxml, GameBoardViewFxml, UserFeedbackViewFxml)
+  - src/main/resources/
+    - assets/icon.png — application icon
+    - messages*.properties — resource bundles for localization
+
+Note: Exact layout may evolve; see the source tree for the latest structure.
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Prerequisites
+- JDK 17+ installed and configured (JAVA_HOME set)
+- One of:
+  - Gradle (with the JavaFX plugin) or the provided Gradle Wrapper, or
+  - Maven (with javafx-maven-plugin), or
+  - A JavaFX SDK on your machine if running directly from the JDK without a build tool
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+### Clone
 ```
-cd existing_repo
-git remote add origin https://gitlab-edu.supsi.ch/dti-isin/labingsw/labingsw01/demos/labs/minesweeper.git
-git branch -M main
-git push -uf origin main
+git clone https://github.com/lucamazzza/minesweeper.git
+cd minesweeper
 ```
 
-## Integrate with your tools
+### Run from an IDE (recommended)
+1. Open the project in your IDE (e.g., IntelliJ IDEA).
+2. Ensure the JDK is set to 17 or later.
+3. Mark the `frontend` module as an application module if needed.
+4. Run the main class:
+   - Main class: `ch.supsi.minesweeper.MainFx`
 
-- [ ] [Set up project integrations](https://gitlab-edu.supsi.ch/dti-isin/labingsw/labingsw01/demos/labs/minesweeper/-/settings/integrations)
+If your IDE does not automatically manage JavaFX modules, add VM options (see “Run with plain Java” below).
 
-## Collaborate with your team
+### Run with Maven
+If the project includes Maven with JavaFX plugin:
+```
+mvn -f frontend javafx:run
+```
+or from the root if configured:
+```
+mvn javafx:run
+```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Run with plain Java (without build tool)
+When running outside Gradle/Maven, you must provide JavaFX modules on the module path. Example:
+```
+java \
+  --module-path /path/to/javafx-sdk-<version>/lib \
+  --add-modules javafx.controls,javafx.fxml \
+  -cp frontend/target/classes \
+  ch.supsi.minesweeper.MainFx
+```
+Adjust the classpath to your compiled classes output directory (e.g., `build/classes/java/main` for Gradle).
 
-## Test and Deploy
+## How to play
+- Left click: reveal a cell.
+- Right click: place/remove a flag to mark a suspected mine.
+- Numbers indicate how many mines are adjacent to that cell.
+- Clear all non-mine cells to win. Revealing a mine ends the game.
 
-Use the built-in continuous integration in GitLab.
+Game options (board size/mines) and language can be adjusted via the menu and/or preferences.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Architecture
+The application follows an MVC-inspired design:
 
-***
+- Models
+  - `GameModel`, `BoardModel`: hold game and board state, expose observable changes.
+- Controllers
+  - `GameController`: centralizes game logic and event handling (menu actions, player actions).
+  - `UserPreferencesController`: manages user preferences and notifications.
+- Views (JavaFX, FXML-backed)
+  - `MenuBarViewFxml`: application menu (integrates with system menu on macOS).
+  - `GameBoardViewFxml`: grid of cells and interaction area.
+  - `UserFeedbackViewFxml`: game status, counters, messages.
 
-# Editing this README
+Internationalization is implemented via Java `ResourceBundle` (e.g., `messages.properties` and localized variants). Preferences are handled through a `UserPreferences` service.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Development notes
+- Minimum Java version: 17 (recommended).
+- Ensure JavaFX modules are available at runtime (handled automatically by Gradle/Maven setups configured with the JavaFX plugin).
+- Styling is done via JavaFX CSS in resources.
+- On macOS, the menu bar is integrated into the system menu bar (uses `MenuToolkit`), so the in-window menu bar may not be shown.
