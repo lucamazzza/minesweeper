@@ -26,9 +26,20 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+          export MAVEN_OPTS="-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=${GITHUB_WORKSPACE}/.m2/repository -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+          MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version --no-transfer-progress --no-snapshot-updates"
+          cd frontend
+          mvn $MAVEN_CLI_OPTS clean
+          mvn $MAVEN_CLI_OPTS package
+          cd ..
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: |
+          export MAVEN_OPTS="-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=${GITHUB_WORKSPACE}/.m2/repository -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+          MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version --no-transfer-progress --no-snapshot-updates"
+          cd frontend
+          mvn $MAVEN_CLI_OPTS deploy -s $GITHUB_WORKSPACE/settings.xml
+          cd ..
       env:
         GITHUB_TOKEN: ${{ github.token }}
