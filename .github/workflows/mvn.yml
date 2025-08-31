@@ -1,0 +1,80 @@
+name: Maven Clean Package
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+env:
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    --no-transfer-progress
+    --no-snapshot-updates
+
+jobs:
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check backend and frontend directories exist
+        run: |
+          [ -d backend ] || exit 1
+          [ -d frontend ] || exit 1
+
+  install-package:
+    needs: structure
+    runs-on: ubuntu-latest
+    env:
+      MAVEN_OPTS: ${{ env.MAVEN_OPTS }}
+      MAVEN_CLI_OPTS: ${{ env.MAVEN_CLI_OPTS }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Build backend
+        run: |
+          cd backend
+          mvn $MAVEN_CLI_OPTS clean
+          mvn $MAVEN_CLI_OPTS install
+          cd ..
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          mvn $MAVEN_CLI_OPTS clean
+          mvn $MAVEN_CLI_OPTS package
+          cd ..
+
+      - name: Upload backend jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: backend/target/*.jar
+
+      - name: Upload frontend jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-jar
+          path: frontend/target/*.jar
