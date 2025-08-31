@@ -11,6 +11,13 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <distributionManagement>
+        <repository>
+           <id>github</id>
+           <name>GitHub lucamazzza Apache Maven Packages</name>
+           <url>https://maven.pkg.github.com/lucamazzza/minesweeper</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>ch.supsi.minesweeper</groupId>
